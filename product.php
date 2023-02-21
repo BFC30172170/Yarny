@@ -33,6 +33,7 @@ if ($_GET['id']) {
 
       <!-- Product info -->
       <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+        <div class="flex gap-2">
         <?php
         foreach ($product->categories as $category) {
         ?>
@@ -40,7 +41,17 @@ if ($_GET['id']) {
         <?php
         }
         ?>
-        <a href="#"><?= $product->slug ?></a>
+                <a href="#"><?= $product->slug ?></a>
+        </div>
+                <div class="flex">
+        <?php
+        foreach ($product->tags as $tag) {
+        ?>
+          <p class="bg-emerald-300 rounded-lg p-1 text-white"><?=$tag->name?></p>
+        <?php
+        }
+        ?>
+        </div>
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900"><?= $product->name ?></h1><button onclick="deleteProduct(<?=$product->id?>)">DELETE</button> <a href="updateProduct.php?id=<?=$product->id?>">EDIT</a>
 
         <div class="mt-3">

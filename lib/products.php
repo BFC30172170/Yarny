@@ -1,5 +1,6 @@
 <?php
 include_once 'categories.php';
+include_once 'tags.php';
 
     class Product {
         function __construct(PDO $con, $obj){
@@ -12,6 +13,7 @@ include_once 'categories.php';
             $this->image = $obj['PRODUCT_IMG_PATH'];
             $this->category = $obj['CATEGORY_ID'];
             $this->categories = getParentCategories($con, $obj['CATEGORY_ID']);
+            $this->tags = getProductTags($con, $obj['PRODUCT_ID']);
             $this->active = $obj['PRODUCT_ACTIVE'] === 1 ? true : false;
             }
         }
@@ -60,7 +62,6 @@ include_once 'categories.php';
             $product = new Product($con, $result);
             array_push($products,$product);
            }
-           var_dump(count($products));
            return $products;
         };
     };

@@ -51,6 +51,15 @@ foreach ($results as $row){
           <h3 class="text-gray-900 text-sm font-medium truncate"><?= $row->id?> - <?= $row->name?></h3>
         </div>
         <p class="mt-1 text-gray-500 text-sm truncate">£<?= $row->price?> <?= $row->description?></p>
+        <div class="flex">
+        <?php
+        foreach ($row->tags as $tag) {
+        ?>
+          <p class="bg-emerald-300 rounded-lg p-1 text-white"><?=$tag->name?></p>
+        <?php
+        }
+        ?>
+        </div>
       </div>
       
     </div>
