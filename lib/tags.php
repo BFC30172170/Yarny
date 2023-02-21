@@ -29,4 +29,21 @@
            return $tags;
     };
  }
+
+ function getTags(PDO $con){
+    $sql = 'SELECT * FROM Tag;';
+    $stmt = $con->prepare($sql);
+    $stmt->execute();
+    if ($stmt->rowCount() == 0){
+        return [];
+    }else{
+       $results = $stmt->fetchAll();
+           $tags = array();
+           foreach ($results as $result) {
+            $tag= new Tag($con, $result);
+            array_push($tags,$tag);
+           }
+           return $tags;
+    };
+ }
 ?>

@@ -1,13 +1,13 @@
 <?php
-include 'inc_head.php';
-include './lib/products.php';
+include '../../inc/inc_head.php';
+include '../../lib/products.php';
 ?>
 
 <?php
 if ($_GET['id']) {
   $product = getProduct($con, $_GET['id']);
 } else {
-  header("Location: http://localhost/fullstacksitetemplate/products.php");
+  header("Location: http://localhost/fullstacksitetemplate/pages/products");
   die();
 };
 ?>
@@ -37,7 +37,7 @@ if ($_GET['id']) {
         <?php
         foreach ($product->categories as $category) {
         ?>
-          <a href="/fullstacksitetemplate/products.php?category=<?= $category['CATEGORY_ID'] ?>"><?= $category['CATEGORY_NAME'] ?></a> >
+          <a href="/fullstacksitetemplate/products.php?category=<?= $category->id ?>"><?= $category->name ?></a> >
         <?php
         }
         ?>
@@ -52,7 +52,9 @@ if ($_GET['id']) {
         }
         ?>
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900"><?= $product->name ?></h1><button onclick="deleteProduct(<?=$product->id?>)">DELETE</button> <a href="updateProduct.php?id=<?=$product->id?>">EDIT</a>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900"><?= $product->name ?></h1>
+        <button onclick="deleteProduct(<?=$product->id?>)">DELETE</button> 
+        <a href="./update.php?id=<?=$product->id?>">EDIT</a>
 
         <div class="mt-3">
           <h2 class="sr-only">Product information</h2>
@@ -81,5 +83,5 @@ if ($_GET['id']) {
 
 
 <?php
-include 'inc_foot.php'
+include '../../inc/inc_foot.php'
 ?>

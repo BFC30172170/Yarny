@@ -1,6 +1,7 @@
 <?php
 include_once 'categories.php';
 include_once 'tags.php';
+include_once 'queries.php';
 
     class Product {
         function __construct(PDO $con, $obj){
@@ -49,9 +50,8 @@ include_once 'tags.php';
         public $active;
     }
 
-    function getProducts(PDO $con){
-        $sql = 'SELECT * FROM product;';
-        $stmt = $con->prepare($sql);
+    function getProducts(PDO $con, Query $qry){
+        $stmt = $qry->constructQuery($con);
         $stmt->execute();
         if ($stmt->rowCount() == 0){
             return [];
@@ -77,7 +77,6 @@ include_once 'tags.php';
         }else{
            $results = $stmt->fetchAll();
            $result = $results[0];
-           $catId = $result['CATEGORY_ID'];
            $product = new Product($con, $result);
            return $product;
         };

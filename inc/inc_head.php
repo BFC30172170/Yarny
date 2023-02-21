@@ -14,10 +14,10 @@
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="./">Home</a></li>
-                <li><a href="./#about">About</a></li>
-                <li><a href="./products.php">Products</a></li>
+            <ul class="flex w-full bg-slate-800 text-white gap-4 p-8 text-xl font-black uppercase">
+                <li><a href="/fullstacksitetemplate/pages">Home</a></li>
+                <li><a href="/fullstacksitetemplate/pages#about">About</a></li>
+                <li><a href="/fullstacksitetemplate/pages/products">Products</a></li>
             </ul>
         </nav>
     </header>

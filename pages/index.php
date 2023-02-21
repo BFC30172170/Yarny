@@ -1,5 +1,5 @@
 <?php
-include 'inc_head.php';
+include '../inc/inc_head.php';
 ?>
 
 <section id="home">
@@ -8,5 +8,5 @@ include 'inc_head.php';
 </section>
 
 <?php
-include 'inc_foot.php';
+include '../inc/inc_foot.php';
 ?>

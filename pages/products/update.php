@@ -1,6 +1,6 @@
 <?php
-include 'inc_head.php';
-include 'lib/products.php';
+include '../../inc/inc_head.php';
+include '../../lib/products.php';
 
 if(isset($_POST['submit'])){
     $product = new ProductDTO($_POST);

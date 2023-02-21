@@ -129,14 +129,18 @@ ALTER TABLE Review
 
 -- SEED
 INSERT INTO Category (CATEGORY_NAME,CATEGORY_DESCRIPTION,PARENT_ID) VALUES ('Wool', 'All Wool Products', NULL);
+INSERT INTO Category (CATEGORY_NAME,CATEGORY_DESCRIPTION,PARENT_ID) VALUES ('Needles', 'All Needle Products', NULL);
 
 INSERT INTO Product (PRODUCT_SLUG,PRODUCT_NAME,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES ('Green Wool', 'Super Chunky Green Wool', 'This is green wool and is very thick. It is good.',1.99,'https://media.istockphoto.com/id/918294950/photo/clew-of-green-thread-for-knitting-isolated-on-white-background.jpg?b=1&s=170667a&w=0&k=20&c=V8rU9H67ebDB3Cs1d4ShLkRaZ7apUaoip8RjkSH3cBs=',1,1);
 INSERT INTO Product (PRODUCT_SLUG,PRODUCT_NAME,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES ('Blue Wool', 'Super Chunky Blue Wool', 'This is blue wool and is very thick. It is good.',2.99,'https://www.hibiscus-plc.co.uk/wp-content/uploads/2017/01/blue-wool-scale-2.jpg',1,1);
 INSERT INTO Product (PRODUCT_SLUG,PRODUCT_NAME,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES ('Yellow Wool', 'Super Chunky Yellow Wool', 'This is yellow wool and is very thick. It is good.',0.99,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQExfU05wJ5bgvDbWx81J1fhvjHEs5SHm-ffnRR84L2U4RpeQCWvp8RGw9ggk0ZyRiv98c:https://www.woolwarehouse.co.uk/media/catalog/product/cache/1/image/330x220/9df78eab33525d08d6e5fb8d27136e95/r/h/rh_9809670_08217_0.jpg&usqp=CAU',1,1);
+INSERT INTO Product (PRODUCT_SLUG,PRODUCT_NAME,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES ('Knitting needles', '9mm Bamboo Knitting needles', 'This is a pair of 9mm Bamboo Knitting needles, they are very nice.',4.99,'https://images.unsplash.com/photo-1513891270183-1df0366c9f22?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80',2,1);
 
 INSERT INTO Tag (TAG_NAME,TAG_DESCRIPTION) VALUES ('Yellow','An Item which is the colour yellow.');
+INSERT INTO Tag (TAG_NAME,TAG_DESCRIPTION) VALUES ('Blue','An Item which is the colour blue.');
 
 INSERT INTO Product_tag(PRODUCT_ID,TAG_ID) VALUES (3,1);
+INSERT INTO Product_tag(PRODUCT_ID,TAG_ID) VALUES (2,2);
 
 INSERT INTO Account(ACCOUNT_NAME,ACCOUNT_HASHEDPASS,ACCOUNT_ROLE,ACCOUNT_EMAIL,ACCOUNT_TELEPHONE,ACCOUNT_MOBILE) VALUES('test','pass','user','test@testing.org','0123345324','013819242');
 
