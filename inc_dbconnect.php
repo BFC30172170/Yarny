@@ -3,8 +3,8 @@
 try {
     $host = "localhost";
     $user = "root";
-    $pass = "";
-    $dbname = "test";
+    $pass = "password";
+    $dbname = "ecommerce";
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
