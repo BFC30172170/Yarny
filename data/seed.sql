@@ -5,7 +5,7 @@ USE ecommerce;
 
 
 -- USER
-DROP USER 'ecommadmin'@'localhost';
+DROP USER IF EXISTS 'ecommadmin'@'localhost';
 CREATE USER 'ecommadmin'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON ecommerce.* TO 'ecommadmin'@'localhost';
 

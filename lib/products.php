@@ -26,6 +26,7 @@ include_once 'queries.php';
         public $image;
         public $category;
         public $categories;
+        public $tags;
         public $active;
     }
 

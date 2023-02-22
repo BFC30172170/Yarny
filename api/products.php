@@ -9,7 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         $json = json_encode($product);
         echo $json;
     }else{
-        $products = getProducts($con);
+        $products = getProducts($con,new Query('dasdsa'));
         $json = json_encode($products);
         echo $json;
     }
