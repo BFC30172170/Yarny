@@ -12,7 +12,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body>
+<body class="">
     <header>
         <nav>
             <ul class="flex w-full bg-slate-800 text-white gap-4 p-8 text-xl font-black uppercase">
@@ -22,4 +22,4 @@
             </ul>
         </nav>
     </header>
-    <main class="p-8">
+    <main class="p-8 h-screen">
