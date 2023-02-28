@@ -1,6 +1,6 @@
 <?php
-include '../../inc/inc_head.php';
-include '../../lib/products.php';
+include_once '../../inc/inc_head.php';
+include_once '../../lib/products.php';
 include_once '../../lib/queries.php';
 ?>
 
