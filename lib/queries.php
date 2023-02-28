@@ -6,11 +6,11 @@ class Query{
     function __construct($queryString){
         $queries= array();
         parse_str($queryString, $queries);
-        $this->category = array_key_exists('category',$queries) ? $queries['category']: null;
-        $this->tags = array_key_exists('tag',$queries) ? explode(',',$queries['tag']) : null;
+        $this->category = array_key_exists('category',$queries) && !empty($queries['category']) ? $queries['category']: null;
+        $this->tags = array_key_exists('tag',$queries) && !empty($queries['tag']) ? explode(',',$queries['tag']) : null;
         $this->sort = array_key_exists('sort',$queries) ? $queries['sort'] : 'PRODUCT_ID';
         $this->order = array_key_exists('order',$queries) ? $queries['order'] : 'ASC';
-        $this->search = array_key_exists('search',$queries) ? '%'.$queries['search'].'%' : null;
+        $this->search = array_key_exists('search',$queries) && !empty($queries['search']) ? '%'.$queries['search'].'%' : null;
     }
     public $category;
     public $tags;
@@ -56,8 +56,6 @@ class Query{
             }
 
         };
-
-        var_dump($stmt);
 
         if(isset($this->category)){
         $stmt->bindValue(':category',$this->category,PDO::PARAM_INT);

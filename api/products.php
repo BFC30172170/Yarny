@@ -1,5 +1,5 @@
 <?php
-include_once('../inc_dbconnect.php');
+include_once('../inc/inc_dbconnect.php');
 include_once('../lib/products.php');
 
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
@@ -9,7 +9,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
         $json = json_encode($product);
         echo $json;
     }else{
-        $products = getProducts($con,new Query('dasdsa'));
+        $products = getProducts($con,new Query($_SERVER['QUERY_STRING']));
         $json = json_encode($products);
         echo $json;
     }

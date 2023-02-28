@@ -27,12 +27,46 @@ $tags = getTags($con);
 $cats = getCategories($con);
 ?>
 <div class="flex">
+
+<script>
+  const fetchProducts = async ()=> {
+    let products = [];
+    const res = await fetch('http://localhost/fullstacksitetemplate/api/products.php/');
+    const json = await res.json();
+    console.log(json)
+    return json;
+  }
+
+  const debounce = (func, timeout = 500) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(()=> {
+        func.apply(this,args);
+
+      }, timeout);
+    };
+  }
+</script>
+
+<div x-data="{
+    products: null,
+    category: '',
+    tags: [],
+    search: '',
+
+    getProducts() {
+        fetch(`http://localhost/fullstacksitetemplate/api/products.php/?category=${this.category}&tag=${this.tags}&search=${this.search}`)
+            .then((response) => response.json())
+            .then((json) => this.products = json);
+    }
+}" x-init="getProducts()" class="">
 <div class="flex flex-col w-1/2">
 <h2 class="text-xl">Tags</h2>
 <?php
 foreach($tags as $tag){
 ?>
-<a href="./?tag=<?=$tag->id?>"><?= $tag->name?></a>
+  <button :class="tags.includes(<?=$tag->id?>) ? 'text-emerald-500' : ''" @click="if(tags.includes(<?=$tag->id?>)){tags = []} else {tags.push(<?=$tag->id?>)}; getProducts();"><?= $tag->name?></button>
 <?php
 }
 ?>
@@ -41,45 +75,32 @@ foreach($tags as $tag){
 <?php
 foreach($cats as $cat){
 ?>
-<a href='./?category=<?=$cat->id?>'><?= $cat->name?></a>
+  <button :class="category == <?=$cat->id?> ? 'text-emerald-500' : ''" @click="if(category == <?=$cat->id?>){category= ''; $el.InnerHTML = 'Hello'} else {category = <?=$cat->id?>}; getProducts();"><?= $cat->name?></button>
 <?php
 }
 ?>
+<label for="search">Search</label>
+<input type="text" name="search" @input.debounce.500ms="search = $el.value; getProducts();"></input>
 </div>
 
 
-<div class="grid grid-cols-3 gap-4 w-1/2">
-<?php
-foreach ($products as $product){
-?>
-
-    <a class="flex flex-1 flex-col border border-2 rounded-xl hover:shadow-md transition duration-300" href="./product.php?id=<?=$product->id?>">
-    <div class="h-24 w-full relative">
-      <img src="<?= $product->image?>" class="h-full w-full object-cover object-center rounded-t-xl">
-      <div class="flex absolute bottom-2 left-2">
-        <?php
-        foreach ($product->tags as $tag) {
-        ?>
-          <p class="bg-emerald-300 rounded-lg p-1 text-white"><?=$tag->name?></p>
-        <?php
-        }
-        ?>
+<div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+<template x-for="product in products" class="hidden">
+<a :href="'./product.php?id='+product.id" class="group">
+        <div @click="console.log(product.tags[0])" class="relative aspect-w-1 aspect-h-1 h-3/4 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 bg-slate-500">
+          <img :src="product.image" :alt="product.name" class="h-full w-full object-cover object-center group-hover:opacity-75">
+          <div class="flex absolute bottom-2 left-2">
+          <template x-for="tag in product.tags" class="hidden">
+            <p x-text="tag.name" class="bg-emerald-300 rounded-lg p-1 text-white"></p>
+          </template>
+          </div>
         </div>
-
-    </div>
-
-        <div class="flex flex-col p-2">
-          <h3 class="text-gray-900 text-sm font-medium truncate"><?= $product->name?></h3>
-          <p class="mt-1 text-gray-500 text-sm truncate">£<?= $product->price?> <?= $product->description?></p>
-        </div>
-
-      </li>
+        <h3 class="mt-4 text-sm text-gray-700" x-text="product.name"></h3>
+        <p class="mt-1 text-lg font-medium text-gray-900" x-text="'£' + product.price"></p>
       </a>
+</template>
+</div>
 
-
-<?php
-}
-?>
 </div>
 </div>
 <?php
