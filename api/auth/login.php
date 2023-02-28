@@ -9,9 +9,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $auth = new Auth();
 
     $response = $auth->userLogin($con,$creds);
-
-    var_dump($response);
-    $data = json_decode($json);
-
     header('Location: /fullstacksitetemplate/pages/account');
 }

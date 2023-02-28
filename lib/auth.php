@@ -19,7 +19,6 @@
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':un',$cred->username,PDO::PARAM_INT);
             $stmt->execute();
-            echo $stmt->rowCount();
             if ($stmt->rowCount() == 0){
                 $this->message = 'Username incorrect';
                 return [];
@@ -36,7 +35,7 @@
             }else{
                 $this->message = 'Password incorrect';
             };
-            return($this->message);
+            return($this);
         }
 
         function userLogout(){
