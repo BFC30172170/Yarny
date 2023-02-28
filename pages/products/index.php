@@ -48,7 +48,7 @@ $cats = getCategories($con);
             <a href='#' class="text-xl">display</a>
             <div class="flex">
                 <label for="search" class="text-xl mr-4">Search</label>
-                <input type="text" class="w-32 border b-2 rounded-lg" name="search"
+                <input type="text" class="w-32 border b-2 rounded-lg pl-2" name="search"
                     @input.debounce.500ms="search = $el.value; getProducts();"></input>
             </div>
         </div>
