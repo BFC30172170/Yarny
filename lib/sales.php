@@ -12,7 +12,7 @@ class Sale {
             $this->dispatched = $obj['SALE_DISPATCHED'];
             $this->estimatedArrival = $obj['SALE_ESTIMATED_ARRIVAL'];
             $this->status = $obj['SALE_STATUS'];
-            $this->account = $obj['ACCOUNT_ID'];
+            $this->address = $obj['ACCOUNT_ID'];
             $this->address = getAddress($con,$obj['ADDRESS_ID']);
             $this->saleRows = getSaleSaleRows($con, $obj['SALE_ID']);
             }
@@ -23,7 +23,7 @@ class Sale {
         public $dispatched;
         public $estimatedArrival;
         public $status;
-        public $account;
+        public $address;
         public $address;
         public $saleRows;
     }

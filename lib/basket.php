@@ -25,3 +25,4 @@ class Basket{
     public $productIds;
     public $products;
     }
+    
