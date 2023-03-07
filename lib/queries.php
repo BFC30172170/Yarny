@@ -19,7 +19,9 @@ class Query{
     public $search;
 
     function constructQuery($con){
+        // Select Products
         $str = 'SELECT DISTINCT p.* FROM Product p';
+        // If Tags are applied, inner join them
         if(isset($this->tags)){
             $str = $str.' INNER JOIN Product_tag pt ON p.PRODUCT_ID = pt.PRODUCT_ID AND pt.TAG_ID IN (';
             foreach ($this->tags as $key => $tag){
@@ -31,14 +33,17 @@ class Query{
             }
             $str .= ')';
         };
+        // If category is applied, inner join it
         if(isset($this->category)){
             $str = $str.' INNER JOIN Category c ON p.CATEGORY_ID = :category';
         };
 
+        // If Search is applied, search on name and description
         if(isset($this->search)){
-            $str = $str.' WHERE p.PRODUCT_NAME LIKE :search';
+            $str = $str.' WHERE p.PRODUCT_NAME LIKE :search OR p.PRODUCT_DESCRIPTION LIKE :search';
         };
 
+        // Order desc or asc, ASC by default
         if(isset($this->order)){
             if($this->order == 'asc'){
                 $str = $str.' ORDER BY p.PRODUCT_ID ASC';
@@ -47,6 +52,7 @@ class Query{
             }
         };
 
+        // Bind values
         $str = $str.';';
         $stmt = $con->prepare($str);
         if(isset($this->tags)){

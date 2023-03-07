@@ -3,6 +3,7 @@ include_once 'categories.php';
 include_once 'tags.php';
 include_once 'queries.php';
 
+    // Product data to be retrieved and manipulated from the database
     class Product {
         function __construct(PDO $con, $obj){
             if (isset($obj['PRODUCT_ID'])){
@@ -30,6 +31,7 @@ include_once 'queries.php';
         public $active;
     }
 
+    // DTO to be used for inputting product data
     class ProductDTO {
         function __construct($obj){
             $this->id = $obj['id'];
@@ -51,6 +53,7 @@ include_once 'queries.php';
         public $active;
     }
 
+    // Get all Products from a query
     function getProducts(PDO $con, Query $qry){
         $stmt = $qry->constructQuery($con);
         $stmt->execute();
@@ -67,7 +70,7 @@ include_once 'queries.php';
         };
     };
 
-
+    // Get a single product by ID
     function getProduct(PDO $con, $id){
         $sql = "SELECT * FROM product WHERE PRODUCT_ID = :id;";
         $stmt = $con->prepare($sql);
@@ -83,6 +86,7 @@ include_once 'queries.php';
         };
     };
 
+    // Create a product with form data
     function createProduct(PDO $con, ProductDTO $product){
         $sql = "INSERT INTO product (PRODUCT_NAME,PRODUCT_SLUG,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES (:name,:slug,:description,:price,:image,:category,:active);";
         $stmt = $con->prepare($sql);
@@ -98,6 +102,7 @@ include_once 'queries.php';
         return $result;
     };
 
+    // Update an Existing Product with form data
     function updateProduct(PDO $con, ProductDTO $product){
         var_dump($product);
         $sql = "UPDATE product SET PRODUCT_NAME = :name, PRODUCT_SLUG = :slug, PRODUCT_DESCRIPTION = :description ,PRODUCT_PRICE = :price ,PRODUCT_IMG_PATH = :image, CATEGORY_ID = :category, PRODUCT_ACTIVE = :active WHERE PRODUCT_ID = :id;";
@@ -114,8 +119,9 @@ include_once 'queries.php';
         $result = $stmt->fetchAll();
     }
 
+    // Set a Product to Deactivate
     function deleteProduct(PDO $con, $id){
-        $sql = "DELETE FROM product WHERE PRODUCT_ID = :id;";
+        $sql = "UPDATE product SET PRODUCT_ACTIVE = 0 WHERE PRODUCT_ID = :id;";
         $stmt = $con->prepare($sql);
         $stmt->bindValue(':id',$id,PDO::PARAM_INT);
         $stmt->execute();
