@@ -84,7 +84,7 @@ $cats = getCategories($con);
 
 
         <div
-            class="col-span-12 md:col-span-9 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            class="col-span-12 md:col-span-9 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 xl:gap-x-8">
             <template x-for="product in products" class="hidden">
                 <a :href="'./product.php?id='+product.id" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-full" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
                     <div
@@ -101,7 +101,7 @@ $cats = getCategories($con);
                         <h3 class="text-sm text-gray-700" x-text="product.name"></h3>
                         <div class="mt-auto flex space-between items-center">
                           <p class="text-lg font-medium text-gray-900" x-text="'£' + product.price"></p> 
-                          <div class="w-4 h-4 bg-teal-500 ml-auto rounded-lg"></div>
+                          <div class="w-4 h-4 bg-teal-500 ml-auto rounded-lg transition duration-300 group-hover:scale-110 group-hover:bg-teal-400 group-hover:shadow-md"></div>
                         </div>
                     </div>
                 </a>

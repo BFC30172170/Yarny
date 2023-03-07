@@ -1,7 +1,7 @@
 <?php
 include_once '../../inc/inc_head.php';
 
-if($_SESSION){
+if(isset($_SESSION['username'])){
     header('Location: /fullstacksitetemplate/pages/account');
 }
 // $password = password_hash('password',PASSWORD_DEFAULT);

@@ -13,9 +13,12 @@ if ($_GET['id']) {
 ?>
 
 <script>
-
-  const deleteProduct = (id) =>{
+  const deleteProduct = (id) => {
     fetch('http://localhost/fullstacksitetemplate/api/products.php?id='+id, {method:'DELETE'});
+  }
+
+  const addToBasket = (id) => {
+    fetch('http://localhost/fullstacksitetemplate/api/basket.php?productId='+id , {method:'POST'}).then(response => response.json());
   }
 </script>
 
@@ -69,13 +72,11 @@ if ($_GET['id']) {
           </div>
         </div>
 
-        <form class="mt-6">
           <div class="mt-10 flex sm:flex-col1 gap-4">
-            <button type="submit" class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Checkout Now</button>
-            <button type="submit" class="max-w-xs flex-1 border border-indigo-600 border-4 rounded-md py-3 px-8 flex items-center justify-center text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Add to bag</button>
+            <button type="submit" class="max-w-xs flex-1 bg-teal-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-teal-500 sm:w-full">Checkout Now</button>
+            <button onclick="addToBasket(<?=$product->id?>)" type="submit" class="max-w-xs flex-1 border border-teal-600 border-4 rounded-md py-3 px-8 flex items-center justify-center text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-teal-500 sm:w-full">Add to bag</button>
 
           </div>
-        </form>
       </div>
     </div>
   </div>

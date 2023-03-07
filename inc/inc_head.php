@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 
 <?php
-    include 'inc_dbconnect.php';
-    include_once 'inc_session.php'
+    include_once 'inc_dbconnect.php';
+    include_once 'inc_session.php';
 ?>
 
 <html>
@@ -12,7 +12,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-
+<?php var_dump($_SESSION)?>
 <body class="">
     <header>
         <nav class="flex space-between bg-teal-400 text-white">
@@ -28,7 +28,13 @@
                 <?php }else{ ?> 
                     Account</a> 
                 <?php } ?></li>
-                <li><a href="/fullstacksitetemplate/pages#about">Basket</a></li>
+                <li><a href="/fullstacksitetemplate/pages/basket">
+                BASKET 
+                <?php if(isset($_SESSION['basket'])){ ?> 
+                <?=count($_SESSION['basket'])?> 
+                <?php }else{ ?> 
+                    0
+                <?php } ?></a> </li>
             </ul>
 
         </nav>
