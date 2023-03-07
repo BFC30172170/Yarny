@@ -16,6 +16,7 @@ class Basket{
     }
 
     function getBasketProducts (PDO $con){
+        $this->products = array();
         foreach ($this->productIds as $id ) {
             $product = getProduct($con, $id);
             array_push($this->products,$product);

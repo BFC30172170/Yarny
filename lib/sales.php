@@ -97,3 +97,29 @@ class Sale {
            return $saleRows;
         };
     };
+
+    function createSale(PDO $con, Basket $basket){
+        $date = date('Y-m-d H:i:s');
+        $sql = "INSERT INTO sale (SALE_CREATED,SALE_STATUS,ACCOUNT_ID,ADDRESS_ID) VALUES (:date,'created',:account,:address);";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':date',$date,PDO::PARAM_STR);
+        $stmt->bindValue(':account',$basket->account,PDO::PARAM_INT);
+        $stmt->bindValue(':address',$basket->address,PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        $saleId = $con->lastInsertId();
+
+        $basket->getBasketProducts($con);
+        
+        foreach ($basket->products as $product) {
+            $sql = "INSERT INTO sale_row (SR_ORIG_PRICE,SR_FINAL_PRICE,SR_QUANTITY,SALE_ID,PRODUCT_ID) VALUES (:original,:final,:quantity,:sale,:product);";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':original',$product->price,PDO::PARAM_STR);
+            $stmt->bindValue(':final',$product->price,PDO::PARAM_STR);
+            $stmt->bindValue(':quantity',$product->count,PDO::PARAM_INT);
+            $stmt->bindValue(':sale',$saleId,PDO::PARAM_INT);
+            $stmt->bindValue(':sale',$product->id,PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
+        }
+    }
