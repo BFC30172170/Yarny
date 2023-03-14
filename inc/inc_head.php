@@ -13,7 +13,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="">
+<body class="" x-data>
     <header>
         <nav class="flex space-between bg-teal-400 text-white">
             <ul class="flex gap-4 p-8 text-xl font-black uppercase">
@@ -39,4 +39,5 @@
 
         </nav>
     </header>
-    <main class="p-8 h-screen">
+
+    <main class="p-8 min-h-screen">

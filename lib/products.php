@@ -16,7 +16,7 @@ include_once 'queries.php';
             $this->category = $obj['CATEGORY_ID'];
             $this->categories = getParentCategories($con, $obj['CATEGORY_ID']);
             $this->tags = getProductTags($con, $obj['PRODUCT_ID']);
-            $this->active = $obj['PRODUCT_ACTIVE'] === 1 ? true : false;
+            $this->active = $obj['PRODUCT_ACTIVE'] == 1 ? true : false;
             }
         }
         public $id;
@@ -34,13 +34,15 @@ include_once 'queries.php';
     // DTO to be used for inputting product data
     class ProductDTO {
         function __construct($obj){
-            $this->id = $obj['id'];
+            if(isset($obj['id'])){
+            $this->id = $obj['id'];}
             $this->name = $obj['name'];
             $this->slug = $obj['slug'];
             $this->description = $obj['description'];
             $this->price = $obj['price'];
             $this->image = $obj['image'];
             $this->category = $obj['category'];
+            $this->tags = $obj['tags'];
             $this->active = $obj['active'];
         }
         public $id;
@@ -50,6 +52,7 @@ include_once 'queries.php';
         public $price;
         public $image;
         public $category;
+        public $tags;
         public $active;
     }
 
@@ -82,7 +85,11 @@ include_once 'queries.php';
            $results = $stmt->fetchAll();
            $result = $results[0];
            $product = new Product($con, $result);
-           return $product;
+           if ($product->active == true){
+            return $product;
+           }else{
+               return null;
+           }
         };
     };
 
@@ -98,8 +105,20 @@ include_once 'queries.php';
         $stmt->bindValue(':category',$product->category,PDO::PARAM_INT);
         $stmt->bindValue(':active',$product->active,PDO::PARAM_BOOL);
         $stmt->execute();
-        $result = $stmt->fetchAll();
-        return $result;
+
+        $last_id = $con->lastInsertId();
+
+        foreach($product->tags as $tag){
+            $sql = "INSERT INTO product_tag (PRODUCT_ID,TAG_ID) VALUES (:product,:tag)";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':product',$last_id,PDO::PARAM_INT);
+            $stmt->bindValue(':tag',$tag,PDO::PARAM_INT);
+            $stmt->execute();
+        }
+
+        $product = getProduct($con, $last_id);
+
+        return $product;
     };
 
     // Update an Existing Product with form data

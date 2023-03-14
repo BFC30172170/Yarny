@@ -11,6 +11,7 @@ class Query{
         $this->sort = array_key_exists('sort',$queries) ? $queries['sort'] : 'PRODUCT_ID';
         $this->order = array_key_exists('order',$queries) ? $queries['order'] : 'ASC';
         $this->search = array_key_exists('search',$queries) && !empty($queries['search']) ? '%'.$queries['search'].'%' : null;
+        $this->active = true;
     }
     public $category;
     public $tags;
@@ -38,10 +39,16 @@ class Query{
             $str = $str.' INNER JOIN Category c ON p.CATEGORY_ID = :category';
         };
 
+        $str = $str.' WHERE 1=1';
+
         // If Search is applied, search on name and description
         if(isset($this->search)){
-            $str = $str.' WHERE p.PRODUCT_NAME LIKE :search OR p.PRODUCT_DESCRIPTION LIKE :search';
+            $str = $str.' AND (p.PRODUCT_NAME LIKE :search OR p.PRODUCT_DESCRIPTION LIKE :search)';
         };
+
+        if($this->active){
+            $str = $str.' AND (p.PRODUCT_ACTIVE = 1)';
+        }
 
         // Order desc or asc, ASC by default
         if(isset($this->order)){

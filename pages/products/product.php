@@ -6,6 +6,9 @@ include '../../lib/products.php';
 <?php
 if ($_GET['id']) {
   $product = getProduct($con, $_GET['id']);
+  if ($product == []){
+    header("Location: http://localhost/fullstacksitetemplate/404.php");
+  }
 } else {
   header("Location: http://localhost/fullstacksitetemplate/pages/products");
   die();
@@ -13,8 +16,10 @@ if ($_GET['id']) {
 ?>
 
 <script>
-  const deleteProduct = (id) => {
-    fetch('http://localhost/fullstacksitetemplate/api/products.php?id='+id, {method:'DELETE'});
+  const deleteProduct = async (id) => {
+    const res = await fetch('http://localhost/fullstacksitetemplate/api/products.php?id='+id, {method:'DELETE'});
+    const json = await res.json();
+    Alpine.store('main').addMessage(json.status,json.message)
   }
 
   const addToBasket = (id) => {
