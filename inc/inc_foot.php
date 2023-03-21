@@ -4,7 +4,7 @@
   <template x-for="message, index in $store.main.messages" class="transition-all duration-300">
 
     <div 
-        :style="`bottom: ${index * 80}px !important;`"
+        :style="`bottom: ${index * 100}px !important;`"
         :class="message.status == 'success' ? 'bg-emerald-200 font-bold absolute w-full p-4 flex space-between rounded-lg transition-all duration-300' : 'bg-red-200 font-bold absolute w-full p-4 flex space-between rounded-lg transition-all duration-300'">
       <hr />
       <div x-text="message.message"></div>
@@ -13,7 +13,7 @@
   </template>
 </div>
 </div>
-
+<?= var_dump($_SESSION['messages']) ?>
 </main>
 <footer 
 class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase mt-auto">Copyright © 2021 Simple Website Template</footer>
@@ -21,11 +21,11 @@ class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase
 
 <script>
 
-
     document.addEventListener("alpine:init", () => {
+      
         Alpine.store("main", {
   // The array of all messages
-  messages: [],
+  messages: <?=json_encode($_SESSION['messages'])?>,
 
   // The next message to add, its value is bound to the textarea field
   newMessage: "",
@@ -58,6 +58,11 @@ class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase
   },
 });
     });
+
+    console.log(<?=json_encode($_SESSION['messages'])?>)
   </script>
 </body>
 </html>
+
+<!-- Clear out session messages after page load -->
+<?php $_SESSION['messages'] = array()?>

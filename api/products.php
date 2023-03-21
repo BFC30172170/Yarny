@@ -1,6 +1,7 @@
 <?php
 include_once('../inc/inc_dbconnect.php');
 include_once('../lib/products.php');
+include_once('../inc/inc_session.php');
 
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     if(isset($_GET['id'])){
@@ -24,6 +25,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "A new product has been created with id of $product->id";
+        $newMessages = $_SESSION['messages'];
+        array_push($newMessages, $response);
+        $_SESSION['messages'] = $newMessages;
     } catch (\Exception $th) {
         $response['status'] = "failure";
         $response['message'] = "A product could not be created, please try again later.";

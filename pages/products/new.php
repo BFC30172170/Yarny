@@ -61,7 +61,6 @@ $cats = getCategories($con);
 
     async function handleSubmission(e){
         e.preventDefault();
-        console.log('hi');
 
         const tags = [];
         const tagsSelection = document.querySelector('#tags-selection')
@@ -81,6 +80,7 @@ $cats = getCategories($con);
         const body = {name, slug, description, price, image, category, tags, active};
 
         const res = await postProduct(body);
+        window.location.href = "http://localhost/fullstacksitetemplate/pages/products/product.php?id=" + res.product.id;
         Alpine.store('main').addMessage(res.status,res.message);
     }
 

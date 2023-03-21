@@ -22,8 +22,10 @@ if ($_GET['id']) {
     Alpine.store('main').addMessage(json.status,json.message)
   }
 
-  const addToBasket = (id) => {
-    fetch('http://localhost/fullstacksitetemplate/api/basket.php?productId='+id , {method:'POST'}).then(response => response.json());
+  const addToBasket = async (id) => {
+    const res = await fetch('http://localhost/fullstacksitetemplate/api/basket.php?productId='+id , {method:'POST'});
+    const json = await res.json();
+    Alpine.store('main').addMessage(json.status,json.message)
   }
 </script>
 
@@ -60,7 +62,7 @@ if ($_GET['id']) {
         }
         ?>
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900"><?= $product->name ?></h1>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900"><?= $product->name ?> <?= $product->active ? '' : '(inactive)' ?></h1>
         <button onclick="deleteProduct(<?=$product->id?>)">DELETE</button> 
         <a href="./update.php?id=<?=$product->id?>">EDIT</a>
 

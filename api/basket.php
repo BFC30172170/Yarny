@@ -26,7 +26,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $basket->addToBasket($id);
         }
         $_SESSION['basket'] = $basket->productIds;
-        $jsonRes = json_encode($basket);
+        
+        $product = getProduct($con, $id);
+        $response['product'] = $product;
+        $response['status'] = "success";
+        $response['message'] = "Item $product->id has been added to your basket";
+        $newMessages = $_SESSION['messages'];
+        array_push($newMessages, $response);
+        $_SESSION['messages'] = $newMessages;
+
+        $jsonRes = json_encode($response);
         echo $jsonRes;
     }
     // } catch (\Throwable $th) {

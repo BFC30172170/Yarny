@@ -111,13 +111,6 @@ function getProduct(PDO $con, $id)
 function createProduct(PDO $con, ProductDTO $product)
 {
     try {
-        if ($product->active) {
-            $product->active = 1;
-        }
-        else {
-            $product->active = 0;
-        }
-        ;
         $sql = "INSERT INTO product (PRODUCT_NAME,PRODUCT_SLUG,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES (:name,:slug,:description,:price,:image,:category,:active);";
         $stmt = $con->prepare($sql);
         $stmt->bindValue(':name', $product->name, PDO::PARAM_STR);
@@ -126,7 +119,7 @@ function createProduct(PDO $con, ProductDTO $product)
         $stmt->bindValue(':price', $product->price, PDO::PARAM_STR);
         $stmt->bindValue(':image', $product->image, PDO::PARAM_STR);
         $stmt->bindValue(':category', $product->category, PDO::PARAM_INT);
-        $stmt->bindValue(':active', $product->active, PDO::PARAM_INT);
+        $stmt->bindValue(':active', $product->active, PDO::PARAM_BOOL);
         $stmt->execute();
 
         $last_id = $con->lastInsertId();
