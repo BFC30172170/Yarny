@@ -81,8 +81,7 @@ $cats = getCategories($con);
         const body = {name, slug, description, price, image, category, tags, active};
 
         const res = await postProduct(body);
-        Alpine.store('main').addMessage(res.status,res.message)
-    
+        Alpine.store('main').addMessage(res.status,res.message);
     }
 
     async function postProduct(form){

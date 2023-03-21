@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "A new product has been created with id of $product->id";
-    } catch (\Throwable $th) {
+    } catch (\Exception $th) {
         $response['status'] = "failure";
         $response['message'] = "A product could not be created, please try again later.";
     }
@@ -41,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "A new product has been created with id of $product->id";
-    } catch (\Throwable $th) {
+    } catch (\Exception $th) {
         $response['status'] = "failure";
         $response['message'] = "A product could not be created, please try again later.";
     }
