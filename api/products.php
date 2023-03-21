@@ -41,13 +41,13 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $productDTO = new ProductDTO($data);
-        $product = createProduct($con, $productDTO);
+        $product = updateProduct($con, $productDTO);
         $response['product'] = $product;
         $response['status'] = "success";
-        $response['message'] = "A new product has been created with id of $product->id";
-    } catch (\Exception $th) {
+        $response['message'] = "Product $product->id has been updated";
+    } catch (\Exception $e) {
         $response['status'] = "failure";
-        $response['message'] = "A product could not be created, please try again later.";
+        $response['message'] = $e->getMessage();
     }
     $jsonRes = json_encode($response);
     echo $jsonRes;

@@ -37,8 +37,8 @@ $cats = getCategories($con);
             .then((json) => this.products = json);
       setTimeout(()=> {
       this.loading = false;
-      },200)
-      }, 200);
+      },450)
+      }, 450);
     }
 }" x-init="getProducts()" class="">
     <header class="flex flex-col md:flex-row space-between w-full border-b-2 mb-4 pb-2">
@@ -85,8 +85,8 @@ $cats = getCategories($con);
 
         <div
             class="col-span-12 md:col-span-9 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 xl:gap-x-8">
-            <template x-for="product in products" class="hidden">
-                <a :href="'./product.php?id='+product.id" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-full" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
+            <template x-for="product, index in products" class="hidden">
+                <a :href="'./product.php?id='+product.id" :style="`transition-delay: ${index * 30}ms !important;`" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-full" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
                     <div
                         class="relative aspect-w-1 aspect-h-1 w-full h-36 overflow-hidden rounded-t-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 bg-slate-100">
                         <img :src="product.image" :alt="product.name"

@@ -13,7 +13,6 @@
   </template>
 </div>
 </div>
-<?= var_dump($_SESSION['messages']) ?>
 </main>
 <footer 
 class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase mt-auto">Copyright © 2021 Simple Website Template</footer>
@@ -59,7 +58,6 @@ class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase
 });
     });
 
-    console.log(<?=json_encode($_SESSION['messages'])?>)
   </script>
 </body>
 </html>

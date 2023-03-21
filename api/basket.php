@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $product = getProduct($con, $id);
         $response['product'] = $product;
         $response['status'] = "success";
-        $response['message'] = "Item $product->id has been added to your basket";
+        $response['message'] = "$product->name has been added to your basket";
         $newMessages = $_SESSION['messages'];
         array_push($newMessages, $response);
         $_SESSION['messages'] = $newMessages;

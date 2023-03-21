@@ -1,7 +1,7 @@
 <?php
 include_once '../../inc/inc_head.php';
 
-if($_SESSION){
+if(isset($_SESSION['username'])){
     header('Location: /fullstacksitetemplate/pages/account');
 }
 // $password = password_hash('password',PASSWORD_DEFAULT);
@@ -17,7 +17,7 @@ if($_SESSION){
         <a href="./login.php" class="font-medium text-teal-600 hover:text-teal-500">Login</a>
       </p>
     </div>
-    <form class="mt-8 space-y-6" action="http://localhost/fullstacksitetemplate/api/auth/login.php" method="POST">
+    <form id="register-form"class="mt-8 space-y-6" action="http://localhost/fullstacksitetemplate/api/auth/register.php" method="POST">
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
           <label for="username" class="sr-only">Username</label>
@@ -35,8 +35,8 @@ if($_SESSION){
           <input id="password" name="password" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-teal-500 focus:outline-none focus:ring-teal-500 sm:text-sm" placeholder="Password">
         </div>
         <div>
-          <label for="password" class="sr-only">Password</label>
-          <input id="password-confirm" name="password-confirm" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-teal-500 focus:outline-none focus:ring-teal-500 sm:text-sm" placeholder="Confirm Password">
+          <label for="passwordConfirm" class="sr-only">Password</label>
+          <input id="passwordConfirm" name="passwordConfirm" type="password" autocomplete="current-password" required class="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-teal-500 focus:outline-none focus:ring-teal-500 sm:text-sm" placeholder="Confirm Password">
         </div>
       </div>
 
@@ -55,6 +55,32 @@ if($_SESSION){
 </div>
 
 <script>
+    const form = document.querySelector('#register-form');
+    form.addEventListener("submit", handleSubmission, false);
+
+    async function handleSubmission(e){
+        e.preventDefault();
+
+        const username = e.target.username.value;
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        const passwordConfirm = e.target.passwordConfirm.value;
+
+        const body = {username, email, password, passwordConfirm};
+
+        const res = await postAccount(body);
+        Alpine.store('main').addMessage(res.status,res.message);
+        window.location.href = "http://localhost/fullstacksitetemplate/pages/account"
+    }
+
+    async function postAccount(form){
+        const res = await fetch('http://localhost/fullstacksitetemplate/api/auth/register.php/',{
+            method:"POST",
+            body: JSON.stringify(form)
+        });
+        const json = await res.json();
+        return json;
+    }
 
 </script>
 

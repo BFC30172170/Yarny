@@ -4,8 +4,8 @@ include_once '../../inc/inc_head.php';
 if(isset($_SESSION['username'])){
     header('Location: /fullstacksitetemplate/pages/account');
 }
-// $password = password_hash('password',PASSWORD_DEFAULT);
-// var_dump($password);
+
+
 ?>
 
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -17,7 +17,7 @@ if(isset($_SESSION['username'])){
         <a href="./register.php" class="font-medium text-teal-600 hover:text-teal-500">Register an account</a>
       </p>
     </div>
-    <form class="mt-8 space-y-6" action="http://localhost/fullstacksitetemplate/api/auth/login.php" method="POST">
+    <form id="login-form" class="mt-8 space-y-6">
       <input type="hidden" name="remember" value="true">
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
@@ -56,9 +56,33 @@ if(isset($_SESSION['username'])){
 </div>
 
 <script>
+    const form = document.querySelector('#login-form');
+    form.addEventListener("submit", handleSubmission, false);
+    console.log(form)
 
-</script>
+    async function handleSubmission(e){
+        e.preventDefault();
 
+        const username = e.target.username.value;
+        const password = e.target.password.value;
+
+        const body = {username, password };
+
+        const res = await postAccount(body);
+        Alpine.store('main').addMessage(res.status,res.message);
+        window.location.href = "http://localhost/fullstacksitetemplate/pages/account"
+    }
+
+    async function postAccount(form){
+        const res = await fetch('http://localhost/fullstacksitetemplate/api/auth/login.php/',{
+            method:"POST",
+            body: JSON.stringify(form)
+        });
+        const json = await res.json();
+        return json;
+    }
+
+    </script>
 
 
 

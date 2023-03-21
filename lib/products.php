@@ -146,7 +146,6 @@ function createProduct(PDO $con, ProductDTO $product)
 // Update an Existing Product with form data
 function updateProduct(PDO $con, ProductDTO $product)
 {
-    var_dump($product);
     $sql = "UPDATE product SET PRODUCT_NAME = :name, PRODUCT_SLUG = :slug, PRODUCT_DESCRIPTION = :description ,PRODUCT_PRICE = :price ,PRODUCT_IMG_PATH = :image, CATEGORY_ID = :category, PRODUCT_ACTIVE = :active WHERE PRODUCT_ID = :id;";
     $stmt = $con->prepare($sql);
     $stmt->bindValue(':id', $product->id, PDO::PARAM_INT);
@@ -158,7 +157,23 @@ function updateProduct(PDO $con, ProductDTO $product)
     $stmt->bindValue(':category', $product->category, PDO::PARAM_INT);
     $stmt->bindValue(':active', $product->active, PDO::PARAM_BOOL);
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    
+    $sql = "DELETE FROM product_tag WHERE PRODUCT_ID = :product;";
+    $stmt = $con->prepare($sql);
+    $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    foreach ($product->tags as $tag) {
+        $sql = "INSERT INTO product_tag (PRODUCT_ID,TAG_ID) VALUES (:product,:tag)";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
+        $stmt->bindValue(':tag', $tag, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    $product = getProduct($con, $product->id);
+
+    return $product;
 }
 
 // Set a Product to Deactivate

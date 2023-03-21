@@ -20,12 +20,14 @@ if ($_GET['id']) {
     const res = await fetch('http://localhost/fullstacksitetemplate/api/products.php?id='+id, {method:'DELETE'});
     const json = await res.json();
     Alpine.store('main').addMessage(json.status,json.message)
+    window.location.href = "http://localhost/fullstacksitetemplate/pages/products";
   }
 
   const addToBasket = async (id) => {
     const res = await fetch('http://localhost/fullstacksitetemplate/api/basket.php?productId='+id , {method:'POST'});
     const json = await res.json();
     Alpine.store('main').addMessage(json.status,json.message)
+    window.location.href = "http://localhost/fullstacksitetemplate/pages/products" 
   }
 </script>
 

@@ -17,6 +17,7 @@ if(isset($_GET['id'])){
 ?>
 
 <form class="flex flex-col" id="product-form">
+<?=$_GET['id']?>
     <label for="name">Name</label>
     <input type="text" name="name" value="<?=$product->name?>"/>
 
@@ -84,17 +85,19 @@ const form = document.querySelector('#product-form');
         const image = e.target.image.value;
         const category = e.target.category.value;
         const active = e.target.active.checked;
+        const id = <?=$_GET['id']?>;
 
-        const body = {name, slug, description, price, image, category, tags, active};
+        const body = {id, name, slug, description, price, image, category, tags, active};
 
-        const res = await postProduct(body);
-        Alpine.store('main').addMessage(res.status,res.message)
+        const res = await putProduct(body);
+        window.location.href = "http://localhost/fullstacksitetemplate/pages/products/product.php?id=" + res.product.id;
+        Alpine.store('main').addMessage(res.status,res.message);
     
     }
 
-    async function postProduct(form){
+    async function putProduct(form){
         const res = await fetch('http://localhost/fullstacksitetemplate/api/products.php/',{
-            method:"POST",
+            method:"PUT",
             body: JSON.stringify(form)
         });
         const json = await res.json();

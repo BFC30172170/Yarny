@@ -18,17 +18,10 @@ include_once 'account.php';
                 $this->message = 'Password not supplied';
             }
 
-            $sql = 'SELECT * FROM Account a WHERE ACCOUNT_NAME = :un';
-            $stmt = $con->prepare($sql);
-            $stmt->bindValue(':un',$cred->username,PDO::PARAM_INT);
-            $stmt->execute();
-            if ($stmt->rowCount() == 0){
+            $account = getAccountByName($con, $cred->username);
+            if (!isset($account)){
                 $this->message = 'Username incorrect';
-                return [];
-            }else{
-                $results = $stmt->fetchAll();
-                $result = $results[0];
-                $account= new Account($con, $result);
+                return null;
             }
             if(password_verify($cred->password,$account->hashedpass)){
                 $_SESSION['username']=$account->username;

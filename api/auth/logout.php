@@ -7,6 +7,6 @@ include_once('../../lib/auth.php');
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $auth = new Auth();
-    $auth->userLogout();
-
+    $auth->userLogout();    
+    header('Location: /fullstacksitetemplate/pages');
 }
