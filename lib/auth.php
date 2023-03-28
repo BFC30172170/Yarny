@@ -1,7 +1,4 @@
 <?php
-
-include_once 'account.php';
-
     class Auth{
         public $message;
         public $valid = true;
@@ -18,7 +15,7 @@ include_once 'account.php';
                 $this->message = 'Password not supplied';
             }
 
-            $account = getAccountByName($con, $cred->username);
+            $account = Account::getAccountByName($con, $cred->username);
             if (!isset($account)){
                 $this->message = 'Username incorrect';
                 return null;

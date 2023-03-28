@@ -1,9 +1,6 @@
 
 <?php
-include_once('../../inc/inc_dbconnect.php');
-include_once('../../inc/inc_session.php');
-include_once('../../lib/auth.php');
-include_once('../../lib/account.php');
+include_once base_path('/inc/inc_dbconnect.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
@@ -25,19 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception('Username must be atleast 4 characters long');
         }
 
-        $matchingAccounts = getAccountByName($con, $accountForm->username);
+        $matchingAccounts = Account::getAccountByName($con, $accountForm->username);
 
         if(isset($matchingAccounts)){
             throw new Exception('Account name taken');
         }
 
-        $matchingAccounts = getAccountByEmail($con, $accountForm->email);
+        $matchingAccounts = Account::getAccountByEmail($con, $accountForm->email);
 
         if(isset($matchingAccounts)){
             throw new Exception('email taken');
         }
 
-        $account = createAccount($con, $accountForm);
+        $account = Account::createAccount($con, $accountForm);
         
         $response['status'] = "success";
         $response['message'] = "Account created";
