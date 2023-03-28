@@ -1,2 +1,3 @@
+FallbackResource /index.php
 ErrorDocument 404 /fullstacksitetemplate/pages/404.php
 ErrorDocument 500 /fullstacksitetemplate/pages/500.php

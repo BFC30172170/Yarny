@@ -1,7 +1,7 @@
 <?php
-include_once '../../inc/inc_head.php';
-include_once '../../lib/products.php';
-include_once '../../lib/queries.php';
+include_once base_path('inc/inc_head.php');
+include_once base_path('lib/products.php');
+include_once base_path('lib/queries.php');
 ?>
 
 <script>
