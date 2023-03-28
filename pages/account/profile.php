@@ -1,11 +1,10 @@
 <?php
-include_once '../../inc/inc_head.php';
-include_once '../../lib/account.php';
+include_once base_path('inc/inc_dbconnect.php');
 ?>
 
 <?php
 $id = $_SESSION['id'];
-$account = getAccount($con, $id);
+$account = Account::getAccount($con, $id);
 ?>
         <p><?=$account->id?></p>
         <p><?=$account->username?></p>

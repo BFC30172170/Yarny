@@ -25,37 +25,39 @@ class Address {
         public $postcode;
         public $country;
         public $account;
+
+        static function getAddress(PDO $con, $id){
+            $sql = "SELECT * FROM address WHERE ADDRESS_ID = :id;";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':id',$id,PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0){
+                return [];
+            }else{
+               $results = $stmt->fetchAll();
+               $result = $results[0];
+               $address = new Address($con, $result);
+               return $address;
+            };
+        }
+    
+        static function getAccountAddresses(PDO $con, $accountId){
+            $sql = "SELECT * FROM address WHERE ACCOUNT_ID = :id;";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':id',$accountId,PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0){
+                return [];
+            }else{
+               $results = $stmt->fetchAll();
+               $addresses = array();
+               foreach ($results as $result) {
+                $address = new Address($con, $result);
+                array_push($addresses,$address);
+               }
+               return $addresses;
+            };
+        }
     }
 
-    function getAddress(PDO $con, $id){
-        $sql = "SELECT * FROM address WHERE ADDRESS_ID = :id;";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id',$id,PDO::PARAM_INT);
-        $stmt->execute();
-        if ($stmt->rowCount() == 0){
-            return [];
-        }else{
-           $results = $stmt->fetchAll();
-           $result = $results[0];
-           $address = new Address($con, $result);
-           return $address;
-        };
-    };
 
-    function getAccountAddresses(PDO $con, $accountId){
-        $sql = "SELECT * FROM address WHERE ACCOUNT_ID = :id;";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id',$accountId,PDO::PARAM_INT);
-        $stmt->execute();
-        if ($stmt->rowCount() == 0){
-            return [];
-        }else{
-           $results = $stmt->fetchAll();
-           $addresses = array();
-           foreach ($results as $result) {
-            $address = new Address($con, $result);
-            array_push($addresses,$address);
-           }
-           return $addresses;
-        };
-    };

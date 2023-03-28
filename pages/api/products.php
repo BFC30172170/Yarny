@@ -1,16 +1,15 @@
 <?php
-include_once('../inc/inc_dbconnect.php');
-include_once('../lib/products.php');
-include_once('../inc/inc_session.php');
+include_once base_path('/inc/inc_dbconnect.php');
+
 
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     if(isset($_GET['id'])){
         $id = $_GET['id'] ?? '0';
-        $product = getProduct($con, $id);
+        $product = Product::getProduct($con, $id);
         $json = json_encode($product);
         echo $json;
     }else{
-        $products = getProducts($con,new Query($_SERVER['QUERY_STRING']));
+        $products = Product::getProducts($con,new Query($_SERVER['QUERY_STRING']));
         $json = json_encode($products);
         echo $json;
     }
@@ -21,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $productDTO = new ProductDTO($data);
-        $product = createProduct($con, $productDTO);
+        $product = Product::createProduct($con, $productDTO);
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "A new product has been created with id of $product->id";
@@ -41,10 +40,13 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $productDTO = new ProductDTO($data);
-        $product = updateProduct($con, $productDTO);
+        $product = Product::updateProduct($con, $productDTO);
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "Product $product->id has been updated";
+        $newMessages = $_SESSION['messages'];
+        array_push($newMessages, $response);
+        $_SESSION['messages'] = $newMessages;
     } catch (\Exception $e) {
         $response['status'] = "failure";
         $response['message'] = $e->getMessage();
@@ -55,14 +57,17 @@ if($_SERVER['REQUEST_METHOD'] == 'PUT'){
 
 
 if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
-    $get_string = $_SERVER['QUERY_STRING'];
-    parse_str($get_string, $get_array);
-    if(isset($get_array['id'])){
-        $id = $get_array['id'] ?? '0';
-        $product = deleteProduct($con, $id);
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+    if(isset($data['productId'])){
+        $id = intval($data['productId']);
+        $product = Product::deleteProduct($con, $id);
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "This product has been deleted and is no longer here";
+        $newMessages = $_SESSION['messages'];
+        array_push($newMessages, $response);
+        $_SESSION['messages'] = $newMessages;
     }else{
         $response['status'] = "failure";
         $response['message'] = "An ID is required to successfully remove a product.";

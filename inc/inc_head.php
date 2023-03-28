@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 
 <?php
-    include_once 'inc_dbconnect.php';
-    include_once 'inc_session.php';
+
 ?>
 
 <html>
@@ -17,18 +16,18 @@
     <header>
         <nav class="flex space-between bg-teal-400 text-white">
             <ul class="flex gap-4 p-8 text-xl font-black uppercase">
-                <li><a href="/fullstacksitetemplate/pages">Home</a></li>
-                <li><a href="/fullstacksitetemplate/pages#about">About</a></li>
-                <li><a href="/fullstacksitetemplate/pages/products">Products</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/#about">About</a></li>
+                <li><a href="/products">Products</a></li>
             </ul>
             <ul class="flex gap-4 p-8 text-xl font-black uppercase ml-auto">
-                <li><a href="/fullstacksitetemplate/pages/account/login.php">
+                <li><a href="/account/login">
                 <?php if (isset($_SESSION['username'])){ ?> 
                 Hi, <?=$_SESSION['username']?> 
                 <?php }else{ ?> 
                     Account</a> 
                 <?php } ?></li>
-                <li><a href="/fullstacksitetemplate/pages/basket">
+                <li><a href="/basket">
                 BASKET 
                 <?php if(isset($_SESSION['basket'])){ ?> 
                 <?=count($_SESSION['basket'])?> 

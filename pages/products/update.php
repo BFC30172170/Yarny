@@ -1,18 +1,17 @@
 <?php
-include '../../inc/inc_head.php';
-include '../../lib/products.php';
+include base_path('/inc/inc_dbconnect.php');
 
 if(isset($_POST['submit'])){
     $product = new ProductDTO($_POST);
-    updateProduct($con, $product);
+    Product::updateProduct($con, $product);
 }
 ?>
 
 <?php
 if(isset($_GET['id'])){
-    $product = getProduct($con, $_GET['id']);
-    $tags = getTags($con);
-    $cats = getCategories($con);
+    $product = Product::getProduct($con, $_GET['id']);
+    $tags = Tag::getTags($con);
+    $cats = Category::getCategories($con);
 }
 ?>
 
@@ -90,13 +89,13 @@ const form = document.querySelector('#product-form');
         const body = {id, name, slug, description, price, image, category, tags, active};
 
         const res = await putProduct(body);
-        window.location.href = "http://localhost/fullstacksitetemplate/pages/products/product.php?id=" + res.product.id;
+        window.location.href = "http://localhost/products/"+ res.product.id;
         Alpine.store('main').addMessage(res.status,res.message);
     
     }
 
     async function putProduct(form){
-        const res = await fetch('http://localhost/fullstacksitetemplate/api/products.php/',{
+        const res = await fetch('http://localhost/api/products',{
             method:"PUT",
             body: JSON.stringify(form)
         });

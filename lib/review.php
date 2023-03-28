@@ -22,22 +22,23 @@ class Review {
         public $active;
         public $product;
         public $account;
-    }
 
-    function getAccountReviews(PDO $con, $accountId){
-        $sql = "SELECT * FROM review WHERE ACCOUNT_ID = :id;";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id',$accountId,PDO::PARAM_INT);
-        $stmt->execute();
-        if ($stmt->rowCount() == 0){
-            return [];
-        }else{
-           $results = $stmt->fetchAll();
-           $reviews = array();
-           foreach ($results as $result) {
-            $review = new Review($con, $result);
-            array_push($reviews,$review);
-           }
-           return $reviews;
-        };
-    };
+        static function getAccountReviews(PDO $con, $accountId){
+            $sql = "SELECT * FROM review WHERE ACCOUNT_ID = :id;";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':id',$accountId,PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0){
+                return [];
+            }else{
+               $results = $stmt->fetchAll();
+               $reviews = array();
+               foreach ($results as $result) {
+                $review = new Review($con, $result);
+                array_push($reviews,$review);
+               }
+               return $reviews;
+            };
+        }
+}
+

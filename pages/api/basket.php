@@ -1,8 +1,5 @@
 <?php
-include_once('../inc/inc_dbconnect.php');
-include_once('../lib/products.php');
-include_once('../lib/basket.php');
-include_once('../inc/inc_session.php');
+include_once base_path('/inc/inc_dbconnect.php');
 
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     echo 'na';
@@ -10,13 +7,10 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // try {
-        $get_string = $_SERVER['QUERY_STRING'];
-        parse_str($get_string, $get_array);
-        if(isset($get_array['productId'])){
-            $id = intval($get_array['productId']);
-
         $json = file_get_contents('php://input');
-        $data = json_decode($json);
+        $data = json_decode($json, true);
+        if(isset($data['productId'])){
+            $id = intval($data['productId']);
 
         if(isset($_SESSION['basket'])){
             $basket = new Basket($_SESSION);
@@ -27,7 +21,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         $_SESSION['basket'] = $basket->productIds;
         
-        $product = getProduct($con, $id);
+        $product = Product::getProduct($con, $id);
         $response['product'] = $product;
         $response['status'] = "success";
         $response['message'] = "$product->name has been added to your basket";

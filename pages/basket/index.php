@@ -1,6 +1,6 @@
 <?php
-include_once '../../inc/inc_head.php';
-include_once '../../lib/basket.php';
+include_once base_path('inc/inc_dbconnect.php');
+include_once base_path('/lib/basket.php');
 ?>
 
 <?php

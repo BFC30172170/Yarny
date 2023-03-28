@@ -1,11 +1,10 @@
 <?php
-include '../../inc/inc_head.php';
-include '../../lib/products.php';
+include base_path('inc/inc_dbconnect.php');
 ?>
 
 <?php
-$tags = getTags($con);
-$cats = getCategories($con);
+$tags = Tag::getTags($con);
+$cats = Category::getCategories($con);
 ?>
 
 <form class="flex flex-col" id="product-form">
@@ -95,6 +94,3 @@ $cats = getCategories($con);
 
 </script>
 
-<?php
-include '../../inc/inc_foot.php';
-?>

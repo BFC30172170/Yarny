@@ -1,11 +1,10 @@
 <?php
-include_once '../../inc/inc_head.php';
-include_once '../../lib/address.php';
+include_once base_path('inc/inc_dbconnect.php');
 ?>
 
 <?php
 $id = $_SESSION['id'];
-$addresses = getAccountAddresses($con, $id);
+$addresses = Address::getAccountAddresses($con, $id);
 ?>
 
 <?php

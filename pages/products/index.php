@@ -1,7 +1,7 @@
 <?php
-include_once base_path('inc/inc_head.php');
-include_once base_path('lib/products.php');
-include_once base_path('lib/queries.php');
+include base_path('inc/inc_dbconnect.php');
+// include_once base_path('/lib/products.php');
+// include_once base_path('/lib/queries.php');
 ?>
 
 <script>
@@ -16,8 +16,9 @@ const fetchProducts = async () => {
 
 
 <?php
-$tags = getTags($con);
-$cats = getCategories($con);
+
+$tags = Tag::getTags($con);
+$cats = Category::getCategories($con);
 ?>
 
 
@@ -32,7 +33,7 @@ $cats = getCategories($con);
     getProducts() {
       this.loading = true;
       setTimeout(()=> {
-        fetch(`http://localhost/fullstacksitetemplate/api/products.php/?category=${this.category}&tag=${this.tags}&search=${this.search}`)
+        fetch(`http://localhost/api/products?category=${this.category}&tag=${this.tags}&search=${this.search}`)
             .then((response) => response.json())
             .then((json) => this.products = json);
       setTimeout(()=> {
@@ -86,7 +87,7 @@ $cats = getCategories($con);
         <div
             class="col-span-12 md:col-span-9 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 xl:gap-x-8">
             <template x-for="product, index in products" class="hidden">
-                <a :href="'./product.php?id='+product.id" :style="`transition-delay: ${index * 30}ms !important;`" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-full" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
+                <a :href="'/products/'+product.id" :style="`transition-delay: ${index * 30}ms !important;`" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-full" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
                     <div
                         class="relative aspect-w-1 aspect-h-1 w-full h-36 overflow-hidden rounded-t-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 bg-slate-100">
                         <img :src="product.image" :alt="product.name"
@@ -110,7 +111,3 @@ $cats = getCategories($con);
     </div>
 </div>
 
-
-<?php
-include '../../inc/inc_foot.php';
-?>

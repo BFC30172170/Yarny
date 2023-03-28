@@ -1,6 +1,4 @@
 <?php
-include_once '../../inc/inc_head.php';
-
 if(isset($_SESSION['username'])){
     header('Location: /fullstacksitetemplate/pages/account');
 }
@@ -88,11 +86,3 @@ if(isset($_SESSION['username'])){
 
 
 
-
-
-
-
-
-<?php
-include_once '../../inc/inc_foot.php';
-?>

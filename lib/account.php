@@ -21,6 +21,64 @@ class Account{
         public $telephone;
         public $mobile;
         public $created;
+
+        static function getAccount(PDO $con, $id){
+            $sql = "SELECT * FROM account WHERE ACCOUNT_ID = :id;";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':id',$id,PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0){
+                return null;
+            }else{
+               $results = $stmt->fetchAll();
+               $result = $results[0];
+               $account = new Account($con, $result);
+               return $account;
+            };
+        }
+    
+        static function createAccount(PDO $con, AccountDTO $account){
+            $sql = "INSERT INTO account (ACCOUNT_NAME,ACCOUNT_HASHEDPASS,ACCOUNT_EMAIL, ACCOUNT_ROLE) VALUES (:name,:hashedpass,:email,'user');";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':name', $account->username, PDO::PARAM_STR);
+            $stmt->bindValue(':hashedpass', $account->getHashedPassword(), PDO::PARAM_STR);
+            $stmt->bindValue(':email', $account->email, PDO::PARAM_STR);
+            $stmt->execute();
+    
+            $last_id = $con->lastInsertId();
+            $account = Account::getAccount($con,$last_id);
+            return $account;
+        }
+    
+        static function getAccountByName(PDO $con, $name){
+            $sql = "SELECT * FROM account WHERE ACCOUNT_NAME = :name;";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':name',$name,PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0){
+                return null;
+            }else{
+               $results = $stmt->fetchAll();
+               $result = $results[0];
+               $account = new Account($con, $result);
+               return $account;
+            };
+        }
+    
+        static function getAccountByEmail(PDO $con, $email){
+            $sql = "SELECT * FROM account WHERE ACCOUNT_EMAIL = :email;";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':email',$email,PDO::PARAM_STR);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0){
+                return null;
+            }else{
+               $results = $stmt->fetchAll();
+               $result = $results[0];
+               $account = new Account($con, $result);
+               return $account;
+            };
+        }
     }
 
     class AccountDTO{
@@ -38,63 +96,7 @@ class Account{
         function getHashedPassword(){
             return password_hash($this->password, PASSWORD_DEFAULT);
         }
+
     }
 
-    function getAccount(PDO $con, $id){
-        $sql = "SELECT * FROM account WHERE ACCOUNT_ID = :id;";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':id',$id,PDO::PARAM_INT);
-        $stmt->execute();
-        if ($stmt->rowCount() == 0){
-            return null;
-        }else{
-           $results = $stmt->fetchAll();
-           $result = $results[0];
-           $account = new Account($con, $result);
-           return $account;
-        };
-    };
-
-    function createAccount(PDO $con, AccountDTO $account){
-        $sql = "INSERT INTO account (ACCOUNT_NAME,ACCOUNT_HASHEDPASS,ACCOUNT_EMAIL, ACCOUNT_ROLE) VALUES (:name,:hashedpass,:email,'user');";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':name', $account->username, PDO::PARAM_STR);
-        $stmt->bindValue(':hashedpass', $account->getHashedPassword(), PDO::PARAM_STR);
-        $stmt->bindValue(':email', $account->email, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $last_id = $con->lastInsertId();
-        $account = getAccount($con,$last_id);
-        return $account;
-    }
-
-    function getAccountByName(PDO $con, $name){
-        $sql = "SELECT * FROM account WHERE ACCOUNT_NAME = :name;";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':name',$name,PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->rowCount() == 0){
-            return null;
-        }else{
-           $results = $stmt->fetchAll();
-           $result = $results[0];
-           $account = new Account($con, $result);
-           return $account;
-        };
-    };
-
-    function getAccountByEmail(PDO $con, $email){
-        $sql = "SELECT * FROM account WHERE ACCOUNT_EMAIL = :email;";
-        $stmt = $con->prepare($sql);
-        $stmt->bindValue(':email',$email,PDO::PARAM_STR);
-        $stmt->execute();
-        if ($stmt->rowCount() == 0){
-            return null;
-        }else{
-           $results = $stmt->fetchAll();
-           $result = $results[0];
-           $account = new Account($con, $result);
-           return $account;
-        };
-    };
 

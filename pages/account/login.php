@@ -1,8 +1,6 @@
 <?php
-include_once '../../inc/inc_head.php';
-
 if(isset($_SESSION['username'])){
-    header('Location: /fullstacksitetemplate/pages/account');
+    header('Location: /account');
 }
 
 
@@ -70,11 +68,11 @@ if(isset($_SESSION['username'])){
 
         const res = await postAccount(body);
         Alpine.store('main').addMessage(res.status,res.message);
-        window.location.href = "http://localhost/fullstacksitetemplate/pages/account"
+        window.location.href = "http://localhost/pages/account"
     }
 
     async function postAccount(form){
-        const res = await fetch('http://localhost/fullstacksitetemplate/api/auth/login.php/',{
+        const res = await fetch('http://localhost/api/auth/login',{
             method:"POST",
             body: JSON.stringify(form)
         });
@@ -87,11 +85,3 @@ if(isset($_SESSION['username'])){
 
 
 
-
-
-
-
-
-<?php
-include_once '../../inc/inc_foot.php';
-?>

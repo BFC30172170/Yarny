@@ -1,4 +1,5 @@
 
+<?=var_dump($_SESSION['messages'])?>
 <div class="fixed bottom-4 right-4 w-96 z-10 transition-all duration-300">
     <div class="relative w-full h-96">
   <template x-for="message, index in $store.main.messages" class="transition-all duration-300">

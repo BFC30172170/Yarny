@@ -1,6 +1,4 @@
 <?php
-include_once('tags.php');
-include_once('categories.php');
 
 class Query{
     function __construct($queryString){

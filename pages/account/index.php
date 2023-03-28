@@ -1,17 +1,15 @@
 <?php
-include_once '../../inc/inc_head.php';
-
 if (!isset($_SESSION['username'])){
-    header('Location:http://localhost/fullstacksitetemplate/pages/account/login.php');
+    header('Location:http://localhost/account/login.php');
 }
 ?>
 
 <script>
   const logout = async () =>{
-    const res = await fetch('http://localhost/fullstacksitetemplate/api/auth/logout.php', {method:'POST'})
+    const res = await fetch('http://localhost/api/auth/logout', {method:'POST'})
     // const json = await res.json();
     // console.log(json);
-    window.location.replace("http://localhost/fullstacksitetemplate/pages");
+    window.location.replace("http://localhost/");
   }
 </script>
 
@@ -19,20 +17,15 @@ if (!isset($_SESSION['username'])){
 <h1 class="text-3xl font-bold capitalize"> Your Account</h1>
 <div class="flex gap-4">
 <div class="bg-teal-500 p-10">
-  <a href="./profile.php">Your Profile</a>
+  <a href="/account/profile">Your Profile</a>
 </div>
 <div class="bg-amber-500 p-10">
-  <a href="./orders.php">Your Orders</a>
+  <a href="/account/orders">Your Orders</a>
 </div>
 <div class="bg-cyan-500 p-10">
-  <a href="./reviews.php">Your Reviews</a>
+  <a href="/account/reviews">Your Reviews</a>
 </div>
 <div class="bg-cyan-500 p-10">
-  <a href="./addresses.php">Your Addresses</a>
+  <a href="/account/addresses">Your Addresses</a>
 </div>
 </div>
-
-
-<?php
-include_once '../../inc/inc_foot.php';
-?>

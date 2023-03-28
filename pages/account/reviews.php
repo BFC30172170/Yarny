@@ -1,11 +1,10 @@
 <?php
-include_once '../../inc/inc_head.php';
-include_once '../../lib/review.php';
+include_once base_path('inc/inc_dbconnect.php');
 ?>
 
 <?php
 $id = $_SESSION['id'];
-$reviews = getAccountReviews($con, $id);
+$reviews = Review::getAccountReviews($con, $id);
 ?>
 
 <?php
