@@ -12,7 +12,7 @@ if(isset($_SESSION['username'])){
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Or
-        <a href="./register.php" class="font-medium text-teal-600 hover:text-teal-500">Register an account</a>
+        <a href="./register" class="font-medium text-teal-600 hover:text-teal-500">Register an account</a>
       </p>
     </div>
     <form id="login-form" class="mt-8 space-y-6">

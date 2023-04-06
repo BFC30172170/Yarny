@@ -13,10 +13,10 @@ $cats = Category::getCategories($con);
             <!-- Image gallery -->
             <div class="flex flex-col-reverse">
                 <div class="w-full aspect-w-1 aspect-h-1">
-                    <img src="/placeholder.png" alt="Angled front view with bag zipped and handles upright."
+                    <img id="image-preview" src="/placeholder.png" alt="Angled front view with bag zipped and handles upright."
                         class="w-full h-full object-center object-cover sm:rounded-lg">
                     <label for="image">Upload Image</label>
-                    <input type="file"  name="image" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"/>
+                    <input type="file"  name="image" id="image" onchange="previewImage()" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"/>
                         
                 </div>
             </div>
@@ -79,9 +79,18 @@ $cats = Category::getCategories($con);
 <script>
 const form = document.querySelector('#product-form');
 form.addEventListener("submit", handleSubmission, false);
+const frame = document.querySelector('#image-preview')
+function previewImage(){
+    frame.src=URL.createObjectURL(event.target.files[0]);
+}   
 
 async function handleSubmission(e) {
     e.preventDefault();
+    const imageFile = e.target.image.files[0];
+    const imageRes = await postImage(imageFile);
+
+    console.log('and now i here!')
+
 
     const tags = [];
     const tagsSelection = document.querySelector('#tags-selection')
@@ -94,7 +103,7 @@ async function handleSubmission(e) {
     const slug = e.target.slug.value;
     const description = e.target.description.value;
     const price = e.target.price.value;
-    const image = e.target.image.value;
+    const image = '/' + imageRes.image_source;
     const category = e.target.category.value;
     const active = e.target.active.checked;
 
@@ -109,13 +118,40 @@ async function handleSubmission(e) {
         active
     };
 
+    console.log(imageRes.image_source);
+
     const res = await postProduct(body);
-    window.location.href = "http://localhost/fullstacksitetemplate/pages/products/product.php?id=" + res.product.id;
+    window.location.href = "http://localhost/products" + res.product.id;
     Alpine.store('main').addMessage(res.status, res.message);
 }
 
+async function postImage(file){
+    console.log(file.name);
+    // if(!['image/jpeg', 'image/png'].includes(file.type))
+	// {
+    //     return;
+    // }
+
+    // // check file size (< 2MB)
+    // if(file.size > 2 * 1024 * 1024)
+    // {
+    //     return;
+    // }
+
+    const form_data = new FormData();
+
+    form_data.append('image', file);
+
+    const res = await fetch("http://localhost/api/images", {
+    	method:"POST",
+    	body : form_data
+    })
+    const json = await res.json();
+    return json;
+}
+
 async function postProduct(form) {
-    const res = await fetch('http://localhost/fullstacksitetemplate/api/products.php/', {
+    const res = await fetch('http://localhost/api/products', {
         method: "POST",
         body: JSON.stringify(form)
     });

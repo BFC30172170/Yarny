@@ -12,10 +12,10 @@ if(isset($_SESSION['username'])){
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Register an Account</h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Or
-        <a href="./login.php" class="font-medium text-teal-600 hover:text-teal-500">Login</a>
+        <a href="./login" class="font-medium text-teal-600 hover:text-teal-500">Login</a>
       </p>
     </div>
-    <form id="register-form"class="mt-8 space-y-6" action="http://localhost/fullstacksitetemplate/api/auth/register.php" method="POST">
+    <form id="register-form"class="mt-8 space-y-6" action="http://localhost/fullstacksitetemplate/api/auth/register" method="POST">
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
           <label for="username" class="sr-only">Username</label>
@@ -68,11 +68,11 @@ if(isset($_SESSION['username'])){
 
         const res = await postAccount(body);
         Alpine.store('main').addMessage(res.status,res.message);
-        window.location.href = "http://localhost/fullstacksitetemplate/pages/account"
+        window.location.href = "http://localhost/pages/account"
     }
 
     async function postAccount(form){
-        const res = await fetch('http://localhost/fullstacksitetemplate/api/auth/register.php/',{
+        const res = await fetch('http://localhost/api/auth/register',{
             method:"POST",
             body: JSON.stringify(form)
         });

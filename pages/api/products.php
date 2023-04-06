@@ -17,8 +17,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     try {    
+        var_dump($_FILES);
+        new Product($con,[]);
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
+        var_dump($data);
         $productDTO = new ProductDTO($data);
         $product = Product::createProduct($con, $productDTO);
         $response['product'] = $product;

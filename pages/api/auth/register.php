@@ -4,6 +4,7 @@ include_once base_path('/inc/inc_dbconnect.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
+        $test = new Account($con,['dsad'=>'dasda']);
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $accountForm = new AccountDTO($data);
