@@ -16,6 +16,7 @@ class Query{
     public $sort;
     public $order;
     public $search;
+    public $active;
 
     function constructQuery($con){
         // Select Products
@@ -32,9 +33,26 @@ class Query{
             }
             $str .= ')';
         };
-        // If category is applied, inner join it
+        // If category is applied, inner join it or children or grandchildren
         if(isset($this->category)){
-            $str = $str.' INNER JOIN Category c ON p.CATEGORY_ID = :category';
+            $allCategoryIDs = array($this->category);
+            $allCategories = Category::getChildCategories($con,$this->category);
+            foreach ($allCategories as $key => $childCat) {
+                array_push($allCategoryIDs, $childCat->id);
+                foreach ($childCat->children as $key => $grandChildCat) {
+                    array_push($allCategoryIDs, $grandChildCat->id);
+                }
+            }
+
+            $str = $str.' INNER JOIN Category c ON p.CATEGORY_ID IN(';
+            foreach ($allCategoryIDs as $key => $cat){
+                $str = $str.':cat'.$cat;
+                if($key !== array_key_last($allCategoryIDs)){
+                    $str = $str.',';
+                }
+
+            }
+            $str .= ')';
         };
 
         $str = $str.' WHERE 1=1';
@@ -69,7 +87,10 @@ class Query{
         };
 
         if(isset($this->category)){
-        $stmt->bindValue(':category',$this->category,PDO::PARAM_INT);
+            foreach ($allCategoryIDs as $key => $cat){
+                $catInstance = ':cat'.$cat;
+                $stmt->bindValue($catInstance,$cat,PDO::PARAM_INT);
+            }
         }
 
         if(isset($this->search)){

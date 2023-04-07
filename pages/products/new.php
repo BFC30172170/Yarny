@@ -4,7 +4,7 @@ include base_path('inc/inc_dbconnect.php');
 
 <?php
 $tags = Tag::getTags($con);
-$cats = Category::getCategories($con);
+$cats = Category::getCategoryList($con);
 ?>
 
 <form class="flex flex-col" id="product-form">

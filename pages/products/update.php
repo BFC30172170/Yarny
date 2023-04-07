@@ -11,7 +11,7 @@ if (isset($_POST['submit'])) {
 if (isset($_GET['id'])) {
     $product = Product::getProduct($con, $_GET['id']);
     $tags = Tag::getTags($con);
-    $cats = Category::getCategories($con);
+    $cats = Category::getCategoryList($con);
 }
 ?>
 <form class="flex flex-col" id="product-form">
