@@ -34,6 +34,7 @@ $paths = [
     '/account/reviews' => '/account/reviews.php',
     '/account/login' => '/account/login.php',
     '/account/register' => '/account/register.php',
+    '/admin/categories' => '/admin/categories.php',
     '/api/products' => '/api/products.php',
     '/api/auth/login' => '/api/auth/login.php',
     '/api/auth/logout' => '/api/auth/logout.php',
@@ -41,6 +42,7 @@ $paths = [
     '/api/basket' => '/api/basket.php',
     '/api/categories' => '/api/categories.php',
     '/api/images' => '/api/images.php',
+    '/api/tags' => '/api/tags.php',
     '/404' => '/404.php',
     '/500' => '/500.php',
 ];

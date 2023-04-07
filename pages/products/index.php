@@ -19,9 +19,25 @@ const fetchProducts = async () => {
 
 $tags = Tag::getTags($con);
 $cats = Category::getCategories($con);
+
+function renderCategories($cats){
+    foreach($cats as $cat){
+        renderCategory($cat);
+    }
+} 
+
+function renderCategory(Category $cat){
+    echo '<div class="pl-4">';
+    echo "<button class='flex py-1' :class=\"category == $cat->id ? 'font-black text-teal-500' : ''\"";
+    echo "@click=\"if(category == $cat->id){category= '';} else {category = $cat->id}; getProducts();\">";
+    echo "<div class='rounded-lg w-6 h-6 mr-4' :class=\"category == $cat->id ? 'bg-teal-500' : 'border-2 b-teal-500'\"></div>$cat->name";
+    echo "</button>";
+    foreach ($cat->children as $key => $cat) {
+        renderCategory($cat);
+    }
+    echo '</div>';
+}
 ?>
-
-
 
 <div x-data="{
     products: null,
@@ -59,15 +75,7 @@ $cats = Category::getCategories($con);
 
             <h2 class="text-xl border-b-2 lowercase tracking-wide">Categories</h2>
             <?php
-            foreach($cats as $cat){
-            ?>
-            <button class="flex py-1" :class="category == <?=$cat->id?> ? 'font-black text-teal-500' : ''"
-                @click="if(category == <?=$cat->id?>){category= '';} else {category = <?=$cat->id?>}; getProducts();">
-                <div class="rounded-lg w-6 h-6 mr-4"
-                    :class="category == <?=$cat->id?> ? 'bg-teal-500' : 'border-2 b-teal-500'"></div><?= $cat->name?>
-            </button>
-            <?php
-            }
+            renderCategories($cats);
             ?>
             <h2 class="text-xl border-b-2 lowercase tracking-wide">Tags</h2>
             <?php

@@ -17,7 +17,6 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     try {    
-        var_dump($_FILES);
         new Product($con,[]);
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
@@ -40,6 +39,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 if($_SERVER['REQUEST_METHOD'] == 'PUT'){
     try {    
+        new Product($con,[]);
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         $productDTO = new ProductDTO($data);
