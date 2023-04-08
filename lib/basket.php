@@ -7,11 +7,17 @@ class Basket{
         }else{
             $this->productIds = array();
         }
-        $this->products = array();
+        if(isset($obj['address'])){
+            $this->addressId = $obj['address'];
+        }
     }
 
     function addToBasket($id){
         array_push($this->productIds,$id);
+    }
+
+    function addAddress($id){
+        $this->addressId = $id;
     }
 
     function getBasketProducts (PDO $con){
@@ -22,7 +28,24 @@ class Basket{
         }
         return $this->products;
     }
+
+    function getBasketSummary (){
+        $amount = 0;
+        foreach ($this->products as $product) {
+            $amount = $amount + $product->price;
+        }
+        return $amount;
+    }
+
+    function getBasketPackaging (){
+        $amount = 0;
+        foreach ($this->products as $product) {
+            $amount = $amount + 1.70;
+        }
+        return $amount;
+    }
     public $productIds;
     public $products;
+    public $addressId;
     }
     

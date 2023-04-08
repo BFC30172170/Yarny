@@ -9,7 +9,7 @@ $basket = new Basket($_SESSION);
 $products = $basket->getBasketProducts($con);
 $total = $basket->getBasketSummary();
 $packaging = $basket->getBasketPackaging();
-
+$address = Address::getAddress($con, $basket->addressId);
 ?>
 
 <?php
@@ -29,3 +29,5 @@ foreach($products as $product){
             <div>Postage and Packaging: £<?=$packaging?></div>
             <div>Grand Total: £<?=$total + $packaging?></div>
             <a href="/basket/delivery"><button class="border p-2">Continue</button></a>
+
+            <?php var_dump($address) ?>

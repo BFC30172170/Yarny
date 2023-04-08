@@ -1,32 +1,22 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
+include_once base_path('/lib/basket.php');
 ?>
 
 <?php
+
 $id = $_SESSION['id'];
 $addresses = Address::getAccountAddresses($con, $id);
+
 ?>
 
-<?php
-foreach($addresses as $address){
-?>
-<div>
-<h1 class="text-xl font-black uppercase"><?=$address->postcode?></h1>
-<p>Name: <?=$address->forename?> <?=$address->surname?></p>
-<p><?=$address->line1?></p>
-<p><?=$address->line2?></p>
-<p><?=$address->line3?></p>
-<p><?=$address->town?></p>
-<p><?=$address->postcode?></p>
-<p><?=$address->country?></p>
-<p><?=$address->account?></p>
-</div>
+                <select name="address" id="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    <?php foreach ($addresses as $add) { ?>
+                        <option value="<?= $add->id ?>"><?= $add->postcode ?> - <?= $add->line1 ?></option>
+                    <?php } ?>
+                </select>
 
-<?php
-}
-?>
-
-<form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
+                <form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
     
 <h1 class="text-2xl font-black">Add new Address</h1>
 
@@ -57,9 +47,14 @@ foreach($addresses as $address){
     <button name="submit">Submit</button>
 </form>
 
+<a href="/basket/billing"><button class="border p-2">Checkout</button></a>
+
 <script>
     const form = document.querySelector('#address-form');
     form.addEventListener("submit", handleSubmission, false);
+
+    const picker = document.querySelector('#address');
+    picker.addEventListener("change", handleAddress, false);
 
     async function handleSubmission(e) {
         e.preventDefault();
@@ -87,7 +82,16 @@ foreach($addresses as $address){
         };
 
         const res = await postAddress(body);
-        window.location.href = "/account/addresses"
+        window.location.href = "/basket/delivery"
+        Alpine.store('main').addMessage(res.status, res.message);
+    }
+
+    async function handleAddress(e) {
+        e.preventDefault();
+        console.log(e.target.value);
+        const id = e.target.value;
+
+        const res = await changeAddress(id);
         Alpine.store('main').addMessage(res.status, res.message);
     }
 
@@ -99,4 +103,14 @@ foreach($addresses as $address){
         const json = await res.json();
         return json;
     }
+
+    async function changeAddress(id){
+        const res = await fetch('http://localhost/api/basket/address', {
+            method: "POST",
+            body: JSON.stringify({id})
+        });
+        const json = await res.json();
+        Alpine.store('main').addMessage(json.status, json.message);
+    }
 </script>
+

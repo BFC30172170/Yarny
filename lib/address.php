@@ -58,6 +58,64 @@ class Address {
                return $addresses;
             };
         }
+
+        static function createAddress(PDO $con, AddressDTO $address)
+{
+    try {
+        $sql = "INSERT INTO address (ADDRESS_FORENAME,ADDRESS_SURNAME,ADDRESS_LINE_1,ADDRESS_LINE_2,ADDRESS_LINE_3,ADDRESS_TOWN,ADDRESS_POSTCODE,ADDRESS_COUNTRY,ACCOUNT_ID) VALUES (:forename,:surname,:line1,:line2,:line3,:town,:postcode,:country,:account);";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':forename', $address->forename, PDO::PARAM_STR);
+        $stmt->bindValue(':surname', $address->surname, PDO::PARAM_STR);
+        $stmt->bindValue(':line1', $address->line1, PDO::PARAM_STR);
+        $stmt->bindValue(':line2', $address->line2, PDO::PARAM_STR);
+        $stmt->bindValue(':line3', $address->line3, PDO::PARAM_STR);
+        $stmt->bindValue(':town', $address->town, PDO::PARAM_STR);
+        $stmt->bindValue(':postcode', $address->postcode, PDO::PARAM_STR);
+        $stmt->bindValue(':country', $address->country, PDO::PARAM_STR);
+        $stmt->bindValue(':account', $address->account, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $last_id = $con->lastInsertId();
+
+        $address = Address::getAddress($con, $last_id);
+
+        return $address;
+    }
+    catch (\Exception|PDOException $th) {
+        echo 'hello';
+        return $th;
+    }
+}
+
+
+    }
+
+
+    class AddressDTO {
+        function __construct($obj){
+            if (isset($obj['id'])){
+            $this->id = $obj['id'];
+            }
+            $this->forename = $obj['forename'];
+            $this->surname = $obj['surname'];
+            $this->line1 = $obj['line1'];
+            $this->line2 = $obj['line2'];
+            $this->line3 = $obj['line3'];
+            $this->town = $obj['town'];
+            $this->postcode = $obj['postcode'];
+            $this->country = $obj['country'];
+            $this->account =  $obj['account'];
+            }
+        public $id;
+        public $forename;
+        public $surname;
+        public $line1;
+        public $line2;
+        public $line3;
+        public $town;
+        public $postcode;
+        public $country;
+        public $account;
     }
 
 
