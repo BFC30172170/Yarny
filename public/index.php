@@ -47,6 +47,7 @@ $paths = [
     '/api/categories' => '/api/categories.php',
     '/api/images' => '/api/images.php',
     '/api/tags' => '/api/tags.php',
+    '/api/sale' => '/api/sale.php',
     '/404' => '/404.php',
     '/500' => '/500.php',
 ];

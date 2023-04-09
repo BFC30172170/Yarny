@@ -79,10 +79,9 @@ class Sale {
             $sql = "INSERT INTO sale (SALE_CREATED,SALE_STATUS,ACCOUNT_ID,ADDRESS_ID) VALUES (:date,'created',:account,:address);";
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':date',$date,PDO::PARAM_STR);
-            $stmt->bindValue(':account',$basket->account,PDO::PARAM_INT);
-            $stmt->bindValue(':address',$basket->address,PDO::PARAM_INT);
+            $stmt->bindValue(':account',$basket->accountId,PDO::PARAM_INT);
+            $stmt->bindValue(':address',$basket->addressId,PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->fetchAll();
             $saleId = $con->lastInsertId();
     
             $basket->getBasketProducts($con);
@@ -92,12 +91,15 @@ class Sale {
                 $stmt = $con->prepare($sql);
                 $stmt->bindValue(':original',$product->price,PDO::PARAM_STR);
                 $stmt->bindValue(':final',$product->price,PDO::PARAM_STR);
-                $stmt->bindValue(':quantity',$product->count,PDO::PARAM_INT);
+                $stmt->bindValue(':quantity',1,PDO::PARAM_INT);
                 $stmt->bindValue(':sale',$saleId,PDO::PARAM_INT);
-                $stmt->bindValue(':sale',$product->id,PDO::PARAM_INT);
+                $stmt->bindValue(':product',$product->id,PDO::PARAM_INT);
                 $stmt->execute();
-                $result = $stmt->fetchAll();
             }
+
+           $sale = Sale::getSale($con, $saleId);
+
+            return $sale;
         }
     
     }

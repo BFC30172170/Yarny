@@ -10,6 +10,9 @@ class Basket{
         if(isset($obj['address'])){
             $this->addressId = $obj['address'];
         }
+        if(isset($obj['id'])){
+            $this->accountId = $obj['id'];
+        }
     }
 
     function addToBasket($id){
@@ -47,5 +50,6 @@ class Basket{
     public $productIds;
     public $products;
     public $addressId;
+    public $accountId;
     }
     
