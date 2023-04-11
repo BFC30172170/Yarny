@@ -93,14 +93,14 @@ function renderCategory(Category $cat){
 
 
         <div
-            class="col-span-12 md:col-span-9 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 xl:gap-x-8">
+            class="col-span-12 md:col-span-9 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 xl:gap-x-8 h-content">
             <template x-for="product, index in products" class="hidden">
-                <a :href="'/products/'+product.id" :style="`transition-delay: ${index * 30}ms !important;`" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-full" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
+                <a :href="'/products/'+product.id" :style="`transition-delay: ${index * 30}ms !important;`" class="group shadow-md border-2 rounded-lg hover:shadow-lg transition duration-300 h-56" :class="loading ? 'opacity-0 translate-y-16' : 'opacity-100'">
                     <div
-                        class="relative aspect-w-1 aspect-h-1 w-full h-36 overflow-hidden rounded-t-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 bg-slate-100">
+                        class="relative aspect-w-1 aspect-h-1 w-full h-36 overflow-hidden rounded-t-lg bg-gray-200 bg-slate-100">
                         <img :src="product.image" :alt="product.name"
-                            class="w-full object-cover object-center group-hover:opacity-75">
-                        <div class="flex absolute bottom-2 left-2">
+                            class="w-full h-full object-cover object-center group-hover:opacity-75">
+                        <div class="flex absolute bottom-2 left-2 gap-1">
                             <template x-for="tag in product.tags" class="hidden">
                                 <p x-text="tag.name" class="tag rounded-lg p-1" x-style="`background-color: '${stringToColour('jdsjad')}'`"></p>
                             </template>
@@ -110,7 +110,7 @@ function renderCategory(Category $cat){
                         <h4 class="text-sm text-gray-700" x-text="product.name"></h4>
                         <div class="mt-auto flex space-between items-center">
                           <p class="text-lg font-medium text-gray-900" x-text="'£' + product.price"></p> 
-                          <div class="w-4 h-4 bg-teal-500 ml-auto rounded-lg transition duration-300 group-hover:scale-110 group-hover:bg-teal-400 group-hover:shadow-md"></div>
+                          <i class="fa-solid fa-basket-shopping ml-auto rounded-lg transition duration-300 group-hover:scale-110 group-hover:shadow-md" style="color: #14b8a6;"></i>
                         </div>
                     </div>
                 </a>
