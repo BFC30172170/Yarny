@@ -27,7 +27,7 @@ function renderCategories($cats){
 } 
 
 function renderCategory(Category $cat){
-    echo '<div class="pl-4">';
+    echo '<div class="pl-2">';
     echo "<button class='flex py-1' :class=\"category == $cat->id ? 'font-black text-teal-500' : ''\"";
     echo "@click=\"if(category == $cat->id){category= '';} else {category = $cat->id}; getProducts();\">";
     echo "<div class='rounded-lg w-6 h-6 mr-4' :class=\"category == $cat->id ? 'bg-teal-500' : 'border-2 b-teal-500'\"></div>$cat->name";
@@ -53,16 +53,16 @@ function renderCategory(Category $cat){
             .then((response) => response.json())
             .then((json) => this.products = json);
       setTimeout(()=> {
+      setTagColours();
       this.loading = false;
       },450)
       }, 450);
     }
 }" x-init="getProducts()" class="">
     <header class="flex flex-col md:flex-row space-between w-full border-b-2 mb-4 pb-2">
-        <h1 class="text-3xl"><?= isset($_GET['category']) ? $cat->name : 'Products' ?></h1>
+        <h2 class="text-3xl"><?= isset($_GET['category']) ? $cat->name : 'Products' ?></h2>
         <div class="md:ml-auto flex gap-4 tex-xl">
-            <a href='#' class="text-xl">sort</a>
-            <a href='#' class="text-xl">display</a>
+            <a href='#' class="text-xl"><i class="fa-solid fa-grip"></i> <i class="fa-solid fa-bars"></i></a>
             <div class="flex">
                 <label for="search" class="text-xl mr-4">Search</label>
                 <input type="text" class="w-32 border b-2 rounded-lg pl-2" name="search"
@@ -73,11 +73,11 @@ function renderCategory(Category $cat){
     <div class="grid grid-cols-12">
         <div class="hidden md:flex flex-col col-span-3 align-start p-4">
 
-            <h2 class="text-xl border-b-2 lowercase tracking-wide">Categories</h2>
+            <h3 class="text-xl border-b-2 lowercase tracking-wide">Categories</h3>
             <?php
             renderCategories($cats);
             ?>
-            <h2 class="text-xl border-b-2 lowercase tracking-wide">Tags</h2>
+            <h3 class="text-xl border-b-2 lowercase tracking-wide">Tags</h3>
             <?php
             foreach($tags as $tag){
             ?>
@@ -99,15 +99,15 @@ function renderCategory(Category $cat){
                     <div
                         class="relative aspect-w-1 aspect-h-1 w-full h-36 overflow-hidden rounded-t-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 bg-slate-100">
                         <img :src="product.image" :alt="product.name"
-                            class="h-full w-full object-cover object-center group-hover:opacity-75">
+                            class="w-full object-cover object-center group-hover:opacity-75">
                         <div class="flex absolute bottom-2 left-2">
                             <template x-for="tag in product.tags" class="hidden">
-                                <p x-text="tag.name" class="bg-emerald-300 rounded-lg p-1 text-white"></p>
+                                <p x-text="tag.name" class="tag rounded-lg p-1" x-style="`background-color: '${stringToColour('jdsjad')}'`"></p>
                             </template>
                         </div>
                     </div>
                     <div class="flex flex-col space-between p-2">
-                        <h3 class="text-sm text-gray-700" x-text="product.name"></h3>
+                        <h4 class="text-sm text-gray-700" x-text="product.name"></h4>
                         <div class="mt-auto flex space-between items-center">
                           <p class="text-lg font-medium text-gray-900" x-text="'£' + product.price"></p> 
                           <div class="w-4 h-4 bg-teal-500 ml-auto rounded-lg transition duration-300 group-hover:scale-110 group-hover:bg-teal-400 group-hover:shadow-md"></div>
@@ -119,3 +119,28 @@ function renderCategory(Category $cat){
     </div>
 </div>
 
+<script>
+
+function stringToColour(string){
+    console.log(string)
+    let result = 0;
+    for (let i = 0; i<string.length; i++){
+        result = result + string.charCodeAt(i);
+    }
+    result = result * 12;
+    result = result + 'a';
+    let hue = result.slice(1,4);
+    return hue;
+}
+
+function setTagColours(){
+    const tags = document.querySelectorAll('.tag');
+    tags.forEach(tag => {
+        const hue = stringToColour(tag.innerHTML);
+        tag.style.backgroundColor = 'hsl('+hue+',71%,86%)';
+        console.log(tag);
+    });
+
+}
+
+</script>
