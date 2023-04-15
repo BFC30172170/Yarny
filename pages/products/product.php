@@ -12,6 +12,9 @@ if ($_GET['id']) {
   header("Location: http://localhost/products");
   die();
 };
+
+
+$reviews = Review::getProductReviews($con, $product->id);
 ?>
 
 <script>
@@ -104,3 +107,78 @@ const addToBasket = async (id) => {
         </div>
     </div>
 </div>
+
+<div>
+<?php
+        foreach ($reviews as $review) {
+        ?>
+            <h3><?=$review->name?></h3>
+            <p><?=$review->description?></p>
+            <p><?=$review->score?></p>
+        <?php
+        }
+        ?>
+</div>
+
+<form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="review-form">
+    
+<h1 class="text-2xl font-black">Add new Review</h1>
+
+    <label for="name">Name</label>
+    <input type="text" name="name" value="Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    
+    <label for="description">Description</label>
+    <input type="text" name="description" value="Description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+
+    <label for="score">Score</label>
+    <input type="number" min="0" max="10" step="1" name="score" value="5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+
+    <div class="px-4">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer" name="active">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                            </div>
+                            <span class="ml-3 text-sm font-medium text-gray-900">Active</span>
+                        </label>
+                    </div>
+
+    <button name="submit">Submit</button>
+</form>
+<?php var_dump($_SESSION); ?>
+<script>
+    const form = document.querySelector('#review-form');
+    form.addEventListener("submit", handleSubmission, false);
+
+    async function handleSubmission(e) {
+        e.preventDefault();
+
+        const name = e.target.name.value;
+        const description = e.target.description.value;
+        const score = e.target.score.value;
+        const active = e.target.active.checked;
+        const product = <?=$product->id?>;
+        const account = <?=$_SESSION['id']?>
+
+
+        const body = {
+            name,
+            description,
+            score,
+            active,
+            product,
+            account
+        };
+
+        const res = await postReview(body);
+        Alpine.store('main').addMessage(res.status, res.message);
+    }
+
+    async function postReview(form) {
+        const res = await fetch('http://localhost/api/review', {
+            method: "POST",
+            body: JSON.stringify(form)
+        });
+        const json = await res.json();
+        return json;
+    }
+</script>

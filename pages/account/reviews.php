@@ -11,7 +11,7 @@ $reviews = Review::getAccountReviews($con, $id);
 foreach($reviews as $review){
 ?>
 <div>
-<h1 class="text-xl font-black uppercase"><?=$review->name?></h1>
+<h3><?=$review->name?></h3>
 
 <p><?=$review->description?></p>
 <p><?=$review->score?></p>
