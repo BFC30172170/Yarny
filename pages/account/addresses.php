@@ -1,5 +1,6 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
+include_once base_path('inc/inc_table.php');
 ?>
 
 <!-- Get all the accounts addresss -->
@@ -8,31 +9,17 @@ $id = $_SESSION['id'];
 $addresses = Address::getAccountAddresses($con, $id);
 ?>
 
+<h1> Your Addresses</h1>
+<div class="flex flex-col lg:flex-row w-full gap-8">
 <!-- Render each address -->
 <?php
-foreach ($addresses as $address) 
-{
-?>
-    <div>
-        <h1 class="text-xl font-black uppercase"><?= $address->postcode ?></h1>
-        <p>Name: <?= $address->forename ?>     <?= $address->surname ?></p>
-        <p><?= $address->line1 ?></p>
-        <p><?= $address->line2 ?></p>
-        <p><?= $address->line3 ?></p>
-        <p><?= $address->town ?></p>
-        <p><?= $address->postcode ?></p>
-        <p><?= $address->country ?></p>
-        <p><?= $address->account ?></p>
-    </div>
-
-<?php
-}
+renderTable($con,$addresses);
 ?>
 
 <!-- Render form -->
-<form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
+<form class="flex flex-col w-full lg:w-[600px] p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
 
-    <h1 class="text-2xl font-black">Add new Address</h1>
+    <h2 class="">Add new Address</h2>
 
     <label for="forename">Forename</label>
     <input type="text" name="forename" value="Forename" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
@@ -60,6 +47,7 @@ foreach ($addresses as $address)
 
     <button name="submit">Submit</button>
 </form>
+</div>
 
 <!-- Form logic -->
 <script>

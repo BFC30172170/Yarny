@@ -24,6 +24,7 @@ foreach ($products as $product)
             <p><?= $product->name ?></p>
             <p>£<?= $product->price ?></p>
         </div>
+        <button onclick="removeFromBasket(<?=$product->id?>)">Remove from basket</button>
     </div>
 <?php
 }
@@ -40,3 +41,17 @@ foreach ($products as $product)
     <?= $total + $packaging ?>
 </div>
 <a href="/basket/delivery"><button class="border p-2">Continue</button></a>
+
+<script>
+const removeFromBasket = async (id) => {
+    const res = await fetch('/api/basket', {
+        method: 'DELETE',
+        body: JSON.stringify({
+            'productId': id
+        })
+    });
+    const json = await res.json();
+    Alpine.store('main').addMessage(json.status, json.message)
+    window.location.href = "/basket"
+}
+</script>

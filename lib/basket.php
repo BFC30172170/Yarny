@@ -27,6 +27,10 @@ class Basket
     {
         array_push($this->productIds, $id);
     }
+    function removeFromBasket($id)
+    {
+        unset($this->productIds,$id);
+    }
 
     // Pass in the id of an address to add it as the prospective delivery addresss
     function addAddress($id)

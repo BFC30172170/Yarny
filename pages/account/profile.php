@@ -1,5 +1,6 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
+include_once base_path('inc/inc_table.php');
 ?>
 
 <!-- Get the account and render its details -->
@@ -7,10 +8,9 @@ include_once base_path('inc/inc_dbconnect.php');
 $id = $_SESSION['id'];
 $account = Account::getAccount($con, $id);
 ?>
-<p><?= $account->id ?></p>
-<p><?= $account->username ?></p>
-<p><?= $account->role ?></p>
-<p><?= $account->email ?></p>
-<p><?= $account->telephone ?></p>
-<p><?= $account->mobile ?></p>
-<p><?= $account->created ?></p>
+
+<h1>Your Profile</h1>
+
+<?php
+renderTable($con,[$account]);
+?>

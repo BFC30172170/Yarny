@@ -7,18 +7,22 @@ include_once base_path('inc/inc_dbconnect.php');
 $id = $_SESSION['id'];
 $addresses = Address::getAccountAddresses($con, $id);
 ?>
-
+<h2>Choose a delivery address</h2>
+<div class="flex gap-4">
 <!-- Use all these addresses to populate a picker to choose the basket address -->
-<select name="address" id="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+<select name="address" id="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-16">
     <?php foreach ($addresses as $add) { ?>
         <option value="<?= $add->id ?>"><?= $add->postcode ?> - <?= $add->line1 ?></option>
     <?php } ?>
 </select>
 
-<!-- Form for new address -->
-<form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
+<a href="/basket/billing"><button class="border p-2">Checkout</button></a>
+    </div>
 
-    <h1 class="text-2xl font-black">Add new Address</h1>
+<!-- Form for new address -->
+<form class="flex flex-col w-full p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
+
+    <h2>Or add a new Address</h2>
 
     <label for="forename">Forename</label>
     <input type="text" name="forename" value="Forename" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
@@ -44,11 +48,8 @@ $addresses = Address::getAccountAddresses($con, $id);
     <label for="country">Country</label>
     <input type="text" name="country" value="Country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 
-    <button name="submit">Submit</button>
+    <button name="submit" class="border-2 p-4 my-4 font-bold rounded-lg">Add Address</button>
 </form>
-
-<!-- Continue to next step -->
-<a href="/basket/billing"><button class="border p-2">Checkout</button></a>
 
 <script>
     // Get form & Picker.

@@ -31,15 +31,17 @@
                             Hi, <?= $_SESSION['username'] ?>
                         <?php } else { ?>
                             Login
-                        </a>
-                    <?php } ?>
-                </li>
-                <li><a href="/basket">
-                        <i class="fa-solid fa-basket-shopping" style="color: #14b8a6;"></i>
-                        <?php if (isset($_SESSION['basket'])) { ?>
-                            <?= count($_SESSION['basket']) > 0 ? count($_SESSION['basket']) : '' ?>
                         <?php } ?>
-                    </a> </li>
+                    </a>
+
+                </li>
+                <li><?php if (isset($_SESSION['basket']) && count($_SESSION['basket']) > 0) { ?>
+                    <a href="/basket">
+                            <i class="fa-solid fa-basket-shopping" style="color: #14b8a6;"></i>
+
+                            <?= count($_SESSION['basket']) > 0 ? count($_SESSION['basket']) : '' ?>
+
+                        </a> <?php } ?></li>
             </ul>
 
         </nav>

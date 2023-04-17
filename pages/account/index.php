@@ -12,19 +12,14 @@ if (!isset($_SESSION['username'])) {
 </script>
 
 <!-- Render links to all account pages and logout button -->
-<button onclick="logout()" class="p-2 border-2 shadow-md rounded-lg hover:shadow-lg hover:font-bold">LOGOUT</button>
-<h1 class="text-3xl font-bold capitalize"> Your Account</h1>
-<div class="flex gap-4">
-  <div class="bg-teal-500 p-10">
-    <a href="/account/profile">Your Profile</a>
-  </div>
-  <div class="bg-amber-500 p-10">
-    <a href="/account/orders">Your Orders</a>
-  </div>
-  <div class="bg-cyan-500 p-10">
-    <a href="/account/reviews">Your Reviews</a>
-  </div>
-  <div class="bg-cyan-500 p-10">
-    <a href="/account/addresses">Your Addresses</a>
-  </div>
+
+<div class="flex items-center">
+<h1> Your Account</h1>
+<button onclick="logout()" class="p-2 border-2 shadow-md rounded-lg hover:shadow-lg hover:font-bold ml-auto">LOGOUT</button>
+</div>
+<div class="flex flex-col gap-4 p-4">
+    <a href="/account/profile" class="font-black p-10 rounded-lg bg-center bg-cover bg-[url('https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')]">Your Profile</a>
+    <a href="/account/orders" class="font-black p-10 rounded-lg bg-center bg-cover bg-[url('https://images.unsplash.com/photo-1513672494107-cd9d848a383e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80')]">Your Orders</a>
+    <a href="/account/reviews" class="font-black p-10 rounded-lg bg-center bg-cover bg-[url('https://images.unsplash.com/photo-1633613286991-611fe299c4be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')]">Your Reviews</a>
+    <a href="/account/addresses" class="font-black p-10 rounded-lg bg-center bg-cover bg-[url('https://images.unsplash.com/photo-1464082354059-27db6ce50048?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')]">Your Addresses</a>
 </div>

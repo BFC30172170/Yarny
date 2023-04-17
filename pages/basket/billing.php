@@ -1,5 +1,6 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
+include_once base_path('inc/inc_table.php');
 ?>
 
 <?php
@@ -12,71 +13,44 @@ $address = Address::getAddress($con, $basket->addressId);
 $account = Account::getAccount($con, $basket->accountId);
 ?>
 
-<!-- Render Basket Products -->
-<?php
-foreach ($products as $product) {
-    ?>
-    <div class="flex my-4">
-        <img src="<?= $product->image ?>" alt="Angled front view with bag zipped and handles upright." class="w-16 h-16 object-center object-cover sm:rounded-lg mr-2">
-        <div>
-            <p>
-                <?= $product->name ?>
-            </p>
-            <p>£
-                <?= $product->price ?>
-            </p>
-        </div>
-    </div>
-    <?php
-}
-?>
-<!-- Render Basket Summaries -->
-<div>Substotal: £
-    <?= $total ?>
-</div>
-<div>Postage and Packaging: £
-    <?= $packaging ?>
-</div>
-<div>Grand Total: £
-    <?= $total + $packaging ?>
-</div>
 
+<div class="flex gap-8">
 <!-- Render Selected Address -->
-<div>
-    <h1 class="text-xl font-black uppercase">
-        <?= $address->postcode ?>
-    </h1>
-    <p>Name:
-        <?= $address->forename ?>
-        <?= $address->surname ?>
-    </p>
-    <p>
-        <?= $address->line1 ?>
-    </p>
-    <p>
-        <?= $address->line2 ?>
-    </p>
-    <p>
-        <?= $address->line3 ?>
-    </p>
-    <p>
-        <?= $address->town ?>
-    </p>
-    <p>
-        <?= $address->postcode ?>
-    </p>
-    <p>
-        <?= $address->country ?>
-    </p>
-    <p>
-        <?= $address->account ?>
-    </p>
+<div class="flex flex-col w-full">
+<h1>Review your order</h1>
+<h2>Products</h2>
+<?php
+renderTable($con, $products);
+?>
+<h2>Delivery Address</h2>
+<?php
+renderTable($con, [$address]);
+?>
+<h2>Purchase Account</h2>
+<?php
+renderTable($con, [$account]);
+?>
 </div>
 
-<!-- Render account details -->
-<?php var_dump($account) ?>
+<!-- Render Basket Summaries -->
+<div class="flex flex-col w-96 border-4 p-4 rounded-lg gap-8">
+    <h3>Summary</h3>
+    <div class="flex">
+        <p>Subtotal:</p>
+        <p class="ml-auto"> £<?= $total ?></p>
+    </div>
+    <div class="flex">
+        <p>Postage and Packaging:</p>
+        <p class="ml-auto"> £<?= $packaging ?></p>
+    </div>
+    <div class="flex">
+        <p>Grand Total:</p>
+        <p class="ml-auto"> £<?= $total + $packaging ?></p>
+    </div>
+    <button class="border-4 p-4 hover:font-bold" id="checkout-button">Create Sale</button>
+</div>
+</div>
 
-<button id="checkout-button">Create Sale</button>
 
 <script>
     // Call the sale api, values do not need to be passed as these are all stored in the session

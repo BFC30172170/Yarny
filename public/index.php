@@ -50,6 +50,7 @@ $paths = [
     '/api/review' => '/api/review.php',
     '/404' => '/404.php',
     '/500' => '/500.php',
+    '/401' => '/401.php',
 ];
 
 $dynamicPaths = [
