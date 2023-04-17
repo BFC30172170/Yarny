@@ -1,7 +1,6 @@
 <?php
 
 const BASE_PATH = __DIR__ .'/../';
-
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 
 function base_path($path){

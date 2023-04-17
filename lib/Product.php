@@ -1,12 +1,9 @@
 <?php
 
-// include_once 'categories.php';
-// include_once 'tags.php';
-// include_once 'queries.php';
-
 // Product data to be retrieved and manipulated from the database
 class Product
 {
+    // Construct a product with reference to the ecommerce database, and columns returned
     function __construct(PDO $con, $obj)
     {
         if (isset($obj['PRODUCT_ID'])) {
@@ -33,58 +30,89 @@ class Product
     public $tags;
     public $active;
 
-        // Get all Products from a query
-static function getProducts(PDO $con, Query $qry)
-{
-    $stmt = $qry->constructQuery($con);
-    $stmt->execute();
-    if ($stmt->rowCount() == 0) {
-        return [];
-    }
-    else {
-        $results = $stmt->fetchAll();
-        $products = array();
-        foreach ($results as $result) {
-            $product = new Product($con, $result);
-            array_push($products, $product);
+    // Pass in DB reference and a query object and return all relevant products from that query
+    static function getProducts(PDO $con, Query $qry)
+    {
+        $stmt = $qry->constructQuery($con);
+        $stmt->execute();
+        if ($stmt->rowCount() == 0) {
+            return [];
+        } else {
+            $results = $stmt->fetchAll();
+            $products = array();
+            foreach ($results as $result) {
+                $product = new Product($con, $result);
+                array_push($products, $product);
+            }
+            return $products;
         }
-        return $products;
+        ;
     }
-    ;
-}
 
 
-// Get a single product by ID
-static function getProduct(PDO $con, $id)
-{
-    $sql = "SELECT * FROM product WHERE PRODUCT_ID = :id;";
-    $stmt = $con->prepare($sql);
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    if ($stmt->rowCount() == 0) {
-        return [];
-    }
-    else {
-        $results = $stmt->fetchAll();
-        $result = $results[0];
-        $product = new Product($con, $result);
-        if ($product->active == true) {
-            return $product;
-        }
-        else {
-            return $product;
-        }
-    }
-    ;
-}
-
-
-// Create a product with form data
-static function createProduct(PDO $con, ProductDTO $product)
-{
-    try {
-        $sql = "INSERT INTO product (PRODUCT_NAME,PRODUCT_SLUG,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES (:name,:slug,:description,:price,:image,:category,:active);";
+    // Pass in DB reference and a product ID to return a single product
+    static function getProduct(PDO $con, $id)
+    {
+        $sql = "SELECT * FROM product WHERE PRODUCT_ID = :id;";
         $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($stmt->rowCount() == 0) {
+            return null;
+        } else {
+            $results = $stmt->fetchAll();
+            $result = $results[0];
+            $product = new Product($con, $result);
+            if ($product->active == true) {
+                return $product;
+            } else {
+                return $product;
+            }
+        }
+        ;
+    }
+
+    // Pass in DB reference and DTO to Create a product with form data
+    static function createProduct(PDO $con, ProductDTO $product)
+    {
+        try {
+            $sql = "INSERT INTO product (PRODUCT_NAME,PRODUCT_SLUG,PRODUCT_DESCRIPTION,PRODUCT_PRICE,PRODUCT_IMG_PATH,CATEGORY_ID,PRODUCT_ACTIVE) VALUES (:name,:slug,:description,:price,:image,:category,:active);";
+            $stmt = $con->prepare($sql);
+            $stmt->bindValue(':name', $product->name, PDO::PARAM_STR);
+            $stmt->bindValue(':slug', $product->slug, PDO::PARAM_STR);
+            $stmt->bindValue(':description', $product->description, PDO::PARAM_STR);
+            $stmt->bindValue(':price', $product->price, PDO::PARAM_STR);
+            $stmt->bindValue(':image', $product->image, PDO::PARAM_STR);
+            $stmt->bindValue(':category', $product->category, PDO::PARAM_INT);
+            $stmt->bindValue(':active', $product->active, PDO::PARAM_BOOL);
+            $stmt->execute();
+
+            $last_id = $con->lastInsertId();
+
+            foreach ($product->tags as $tag) {
+                $sql = "INSERT INTO product_tag (PRODUCT_ID,TAG_ID) VALUES (:product,:tag)";
+                $stmt = $con->prepare($sql);
+                $stmt->bindValue(':product', $last_id, PDO::PARAM_INT);
+                $stmt->bindValue(':tag', $tag, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+
+            $product = Product::getProduct($con, $last_id);
+
+            return $product;
+        } catch (\Exception | PDOException $th) {
+            echo 'hello';
+            return $th;
+        }
+    }
+
+
+    // Pass in DB reference and DTO to update an Existing Product with form data
+    static function updateProduct(PDO $con, ProductDTO $product)
+    {
+        $sql = "UPDATE product SET PRODUCT_NAME = :name, PRODUCT_SLUG = :slug, PRODUCT_DESCRIPTION = :description ,PRODUCT_PRICE = :price ,PRODUCT_IMG_PATH = :image, CATEGORY_ID = :category, PRODUCT_ACTIVE = :active WHERE PRODUCT_ID = :id;";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':id', $product->id, PDO::PARAM_INT);
         $stmt->bindValue(':name', $product->name, PDO::PARAM_STR);
         $stmt->bindValue(':slug', $product->slug, PDO::PARAM_STR);
         $stmt->bindValue(':description', $product->description, PDO::PARAM_STR);
@@ -94,73 +122,37 @@ static function createProduct(PDO $con, ProductDTO $product)
         $stmt->bindValue(':active', $product->active, PDO::PARAM_BOOL);
         $stmt->execute();
 
-        $last_id = $con->lastInsertId();
+        $sql = "DELETE FROM product_tag WHERE PRODUCT_ID = :product;";
+        $stmt = $con->prepare($sql);
+        $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
+        $stmt->execute();
 
         foreach ($product->tags as $tag) {
             $sql = "INSERT INTO product_tag (PRODUCT_ID,TAG_ID) VALUES (:product,:tag)";
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':product', $last_id, PDO::PARAM_INT);
+            $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
             $stmt->bindValue(':tag', $tag, PDO::PARAM_INT);
             $stmt->execute();
         }
 
-        $product = Product::getProduct($con, $last_id);
+        $product = Product::getProduct($con, $product->id);
 
         return $product;
     }
-    catch (\Exception|PDOException $th) {
-        echo 'hello';
-        return $th;
-    }
-}
 
-
-// Update an Existing Product with form data
-static function updateProduct(PDO $con, ProductDTO $product)
-{
-    $sql = "UPDATE product SET PRODUCT_NAME = :name, PRODUCT_SLUG = :slug, PRODUCT_DESCRIPTION = :description ,PRODUCT_PRICE = :price ,PRODUCT_IMG_PATH = :image, CATEGORY_ID = :category, PRODUCT_ACTIVE = :active WHERE PRODUCT_ID = :id;";
-    $stmt = $con->prepare($sql);
-    $stmt->bindValue(':id', $product->id, PDO::PARAM_INT);
-    $stmt->bindValue(':name', $product->name, PDO::PARAM_STR);
-    $stmt->bindValue(':slug', $product->slug, PDO::PARAM_STR);
-    $stmt->bindValue(':description', $product->description, PDO::PARAM_STR);
-    $stmt->bindValue(':price', $product->price, PDO::PARAM_STR);
-    $stmt->bindValue(':image', $product->image, PDO::PARAM_STR);
-    $stmt->bindValue(':category', $product->category, PDO::PARAM_INT);
-    $stmt->bindValue(':active', $product->active, PDO::PARAM_BOOL);
-    $stmt->execute();
-    
-    $sql = "DELETE FROM product_tag WHERE PRODUCT_ID = :product;";
-    $stmt = $con->prepare($sql);
-    $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    foreach ($product->tags as $tag) {
-        $sql = "INSERT INTO product_tag (PRODUCT_ID,TAG_ID) VALUES (:product,:tag)";
+    // Pass in DB reference and DTO to set a Product to Deactivate
+    static function deleteProduct(PDO $con, $id)
+    {
+        $sql = "UPDATE product SET PRODUCT_ACTIVE = 0 WHERE PRODUCT_ID = :id;";
         $stmt = $con->prepare($sql);
-        $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
-        $stmt->bindValue(':tag', $tag, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
+        $result = $stmt->fetchAll();
+        return $result;
     }
-
-    $product = Product::getProduct($con, $product->id);
-
-    return $product;
 }
 
-// Set a Product to Deactivate
-static function deleteProduct(PDO $con, $id)
-{
-    $sql = "UPDATE product SET PRODUCT_ACTIVE = 0 WHERE PRODUCT_ID = :id;";
-    $stmt = $con->prepare($sql);
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll();
-    return $result;
-}
-}
-
-// DTO to be used for inputting product data
+// Data Transfer Obect class to act as interface for user generated content to populate product entity in the system
 class ProductDTO
 {
     function __construct($obj)

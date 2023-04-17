@@ -1,65 +1,57 @@
 <div class="fixed bottom-4 right-4 w-96 z-10 transition-all duration-300">
-    <div class="relative w-full h-36">
-  <template x-for="message, index in $store.main.messages" class="transition-all duration-300">
+  <div class="relative w-full h-36">
+    <!-- Render all messages -->
+    <template x-for="message, index in $store.main.messages" class="transition-all duration-300">
 
-    <div 
+      <div
         :style="`bottom: ${index * 100}px !important;`"
         :class="message.status == 'success' ? 'bg-emerald-200 font-bold absolute w-full p-4 flex space-between rounded-lg transition-all duration-300' : 'bg-red-200 font-bold absolute w-full p-4 flex space-between rounded-lg transition-all duration-300'">
-      <hr />
-      <div x-text="message.message"></div>
-      <button @click="$store.main.deleteMessage(index)" class="ml-auto">x</button>
-    </div>
-  </template>
-</div>
+        <hr />
+        <div x-text="message.message"></div>
+        <button @click="$store.main.deleteMessage(index)" class="ml-auto">x</button>
+      </div>
+    </template>
+  </div>
 </div>
 </main>
-<footer 
-class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase mt-auto">Copyright © 2021 Simple Website Template</footer>
+<!-- Footer Content -->
+<footer
+  class="flex w-full bg-teal-400 text-white gap-4 p-8 text-xl font-black uppercase mt-auto">Copyright © 2021 Simple Website Template</footer>
 
 
+<!-- Client side notifcations -->
 <script>
 
-    document.addEventListener("alpine:init", () => {
-      
-        Alpine.store("main", {
-  // The array of all messages
-  messages: <?=json_encode($_SESSION['messages'])?>,
+  document.addEventListener("alpine:init", () => {
 
-  // The next message to add, its value is bound to the textarea field
-  newMessage: "",
+    Alpine.store("main", {
+      // The array of all messages, set to session messages on load,
+      // so that server side messages on page reload/redirect are not lost in the client.
+      messages: <?= json_encode($_SESSION['messages']) ?>,
 
-  // Adds the current value of `newMessage` to the array of messages
-  addMessage(status,message) {
-    let id = Date.now()
-    this.messages.unshift({id,status,message});
+      // Add a message and kill it after 15 secs
+      addMessage(status, message) {
+        let id = Date.now()
+        this.messages.unshift({ id, status, message });
 
-    setTimeout(() => {
-        this.messages = this.messages.filter(function( message) {
-        return message.id !== id;
-        });
-    }, 15000);
-  },
+        setTimeout(() => {
+          this.messages = this.messages.filter(function (message) {
+            return message.id !== id;
+          });
+        }, 15000);
+      },
 
-  // Given an index, changes the capitalization of the message to lower case
-  lowerCaseMessage(index) {
-    this.messages[index] = this.messages[index].toLowerCase();
-  },
-
-  // Given an index, changes the capitalization of the message to upper case
-  upperCaseMessage(index) {
-    this.messages[index] = this.messages[index].toUpperCase();
-  },
-
-  // Given an index, removes the message from the array
-  deleteMessage(index) {
-    this.messages = this.messages.filter((_, i) => i !== index);
-  },
-});
+      // Given an index, removes the message from the array
+      deleteMessage(index) {
+        this.messages = this.messages.filter((_, i) => i !== index);
+      },
     });
+  });
 
-  </script>
+</script>
 </body>
+
 </html>
 
-<!-- Clear out session messages after page load -->
-<?php $_SESSION['messages'] = array()?>
+<!-- Clear out session messages after page load so these do not persist -->
+<?php $_SESSION['messages'] = array() ?>

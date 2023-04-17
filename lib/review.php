@@ -1,8 +1,9 @@
 <?php
 
-
+// A Review is the opinion of a customer with regards to a product.
 class Review
 {
+    // Construct a review with reference to the ecommerce database, and columns returned
     function __construct(PDO $con, $obj)
     {
         if (isset($obj['REVIEW_ID'])) {
@@ -25,7 +26,7 @@ class Review
     public $product;
     public $account;
 
-    // Get a single product by ID
+    // Get a single review by ID
     static function getReview(PDO $con, $id)
     {
         $sql = "SELECT * FROM review WHERE REVIEW_ID = :id;";
@@ -43,9 +44,11 @@ class Review
             } else {
                 return $review;
             }
-        };
+        }
+        ;
     }
 
+    // Pass in DB reference and account id to return all reviews for a specific accounts
     static function getAccountReviews(PDO $con, $accountId)
     {
         $sql = "SELECT * FROM review WHERE ACCOUNT_ID = :id;";
@@ -53,7 +56,7 @@ class Review
         $stmt->bindValue(':id', $accountId, PDO::PARAM_INT);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
-            return [];
+            return null;
         } else {
             $results = $stmt->fetchAll();
             $reviews = array();
@@ -62,9 +65,11 @@ class Review
                 array_push($reviews, $review);
             }
             return $reviews;
-        };
+        }
+        ;
     }
 
+    // Pass in DB reference a product id to return all reviews for a specific accounts
     static function getProductReviews(PDO $con, $productId)
     {
         $sql = "SELECT * FROM review WHERE PRODUCT_ID = :id;";
@@ -81,10 +86,11 @@ class Review
                 array_push($reviews, $review);
             }
             return $reviews;
-        };
+        }
+        ;
     }
 
-
+    // Pass in DB reference and a PDO and create and return the review
     static function createReview(PDO $con, ReviewDTO $review)
     {
         try {
@@ -111,6 +117,7 @@ class Review
     }
 }
 
+// Data Transfer Obect class to act as interface for user generated content to populate review entity in the system
 class ReviewDTO
 {
     function __construct($obj)

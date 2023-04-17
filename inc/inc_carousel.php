@@ -1,10 +1,14 @@
 <?php
 include base_path('inc/inc_dbconnect.php');
+
+// Query Products with specific tag
 $query = new Query('tag=1,2,3,4,5,6,7');
 $products = Product::getProducts($con, $query);
 $last = array_key_last($products);
 ?>
 
+<!-- For each Product, Render the product item with their key designating position in carousel -->
+<!-- Currently, the render is limited to three items due to hardcoded css implementation -->
 <div class="carousel relative shadow-2xl bg-white rounded-lg">
 	<div class="carousel-inner relative overflow-hidden w-full rounded-lg h-60">
     <?php foreach ($products as $key => $product) {
@@ -29,9 +33,7 @@ $last = array_key_last($products);
         <?php
     }
     ?>
-	  <!--Slide 1-->
-	
-		<!-- Add additional indicators for each slide-->
+	<!-- Render additional indicator nubs -->
 		<ol class="carousel-indicators">
 			<li class="inline-block mr-3">
 				<label for="carousel-1" class="carousel-bullet cursor-pointer block text-4xl text-white hover:text-teal-400">•</label>

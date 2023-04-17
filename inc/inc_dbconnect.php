@@ -1,5 +1,7 @@
 <?php
 
+// Connect to the local ecommerce database using admin creds from seed.sql
+
 try {
     $host = "localhost";
     $user = "ecommadmin";
