@@ -1,28 +1,28 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
-include_once base_path('/lib/basket.php');
 ?>
 
 <?php
-
+// Get all the account's addresses
 $id = $_SESSION['id'];
 $addresses = Address::getAccountAddresses($con, $id);
-
 ?>
 
-                <select name="address" id="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                    <?php foreach ($addresses as $add) { ?>
-                        <option value="<?= $add->id ?>"><?= $add->postcode ?> - <?= $add->line1 ?></option>
-                    <?php } ?>
-                </select>
+<!-- Use all these addresses to populate a picker to choose the basket address -->
+<select name="address" id="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+    <?php foreach ($addresses as $add) { ?>
+        <option value="<?= $add->id ?>"><?= $add->postcode ?> - <?= $add->line1 ?></option>
+    <?php } ?>
+</select>
 
-                <form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
-    
-<h1 class="text-2xl font-black">Add new Address</h1>
+<!-- Form for new address -->
+<form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
+
+    <h1 class="text-2xl font-black">Add new Address</h1>
 
     <label for="forename">Forename</label>
     <input type="text" name="forename" value="Forename" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-    
+
     <label for="surname">Surname</label>
     <input type="text" name="surname" value="Surname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 
@@ -47,15 +47,19 @@ $addresses = Address::getAccountAddresses($con, $id);
     <button name="submit">Submit</button>
 </form>
 
+<!-- Continue to next step -->
 <a href="/basket/billing"><button class="border p-2">Checkout</button></a>
 
 <script>
+    // Get form & Picker.
     const form = document.querySelector('#address-form');
     form.addEventListener("submit", handleSubmission, false);
 
     const picker = document.querySelector('#address');
     picker.addEventListener("change", handleAddress, false);
 
+
+    // Handle submission for new address
     async function handleSubmission(e) {
         e.preventDefault();
 
@@ -67,7 +71,7 @@ $addresses = Address::getAccountAddresses($con, $id);
         const town = e.target.town.value;
         const postcode = e.target.postcode.value;
         const country = e.target.country.value;
-        const account = <?=$id?>;
+        const account = <?= $id ?>;
 
         const body = {
             forename,
@@ -86,6 +90,7 @@ $addresses = Address::getAccountAddresses($con, $id);
         Alpine.store('main').addMessage(res.status, res.message);
     }
 
+    // Handle change of picker to set basket address.
     async function handleAddress(e) {
         e.preventDefault();
         console.log(e.target.value);
@@ -95,6 +100,7 @@ $addresses = Address::getAccountAddresses($con, $id);
         Alpine.store('main').addMessage(res.status, res.message);
     }
 
+    // api call to create address
     async function postAddress(form) {
         const res = await fetch('http://localhost/api/addresses', {
             method: "POST",
@@ -104,13 +110,13 @@ $addresses = Address::getAccountAddresses($con, $id);
         return json;
     }
 
-    async function changeAddress(id){
+    // api call to set basket address
+    async function changeAddress(id) {
         const res = await fetch('http://localhost/api/basket/address', {
             method: "POST",
-            body: JSON.stringify({id})
+            body: JSON.stringify({ id })
         });
         const json = await res.json();
         Alpine.store('main').addMessage(json.status, json.message);
     }
 </script>
-

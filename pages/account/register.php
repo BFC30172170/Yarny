@@ -1,9 +1,7 @@
 <?php
-if(isset($_SESSION['username'])){
-    header('Location: /fullstacksitetemplate/pages/account');
+if (isset($_SESSION['username'])) {
+  header('Location: /fullstacksitetemplate/pages/account');
 }
-// $password = password_hash('password',PASSWORD_DEFAULT);
-// var_dump($password);
 ?>
 
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -15,7 +13,7 @@ if(isset($_SESSION['username'])){
         <a href="./login" class="font-medium text-teal-600 hover:text-teal-500">Login</a>
       </p>
     </div>
-    <form id="register-form"class="mt-8 space-y-6" action="http://localhost/fullstacksitetemplate/api/auth/register" method="POST">
+    <form id="register-form" class="mt-8 space-y-6" action="/api/auth/register" method="POST">
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
           <label for="username" class="sr-only">Username</label>
@@ -53,36 +51,35 @@ if(isset($_SESSION['username'])){
 </div>
 
 <script>
-    const form = document.querySelector('#register-form');
-    form.addEventListener("submit", handleSubmission, false);
+  const form = document.querySelector('#register-form');
+  form.addEventListener("submit", handleSubmission, false);
 
-    async function handleSubmission(e){
-        e.preventDefault();
+  async function handleSubmission(e) {
+    e.preventDefault();
 
-        const username = e.target.username.value;
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        const passwordConfirm = e.target.passwordConfirm.value;
+    // Get form values
 
-        const body = {username, email, password, passwordConfirm};
+    const username = e.target.username.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const passwordConfirm = e.target.passwordConfirm.value;
 
-        const res = await postAccount(body);
-        Alpine.store('main').addMessage(res.status,res.message);
-        window.location.href = "http://localhost/pages/account"
-    }
+    const body = { username, email, password, passwordConfirm };
 
-    async function postAccount(form){
-        const res = await fetch('http://localhost/api/auth/register',{
-            method:"POST",
-            body: JSON.stringify(form)
-        });
-        const json = await res.json();
-        return json;
-    }
+    // Send these to the register api
+
+    const res = await postAccount(body);
+    Alpine.store('main').addMessage(res.status, res.message);
+    window.location.href = "http://localhost/pages/account"
+  }
+
+  async function postAccount(form) {
+    const res = await fetch('http://localhost/api/auth/register', {
+      method: "POST",
+      body: JSON.stringify(form)
+    });
+    const json = await res.json();
+    return json;
+  }
 
 </script>
-
-
-
-
-

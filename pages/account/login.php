@@ -1,6 +1,6 @@
 <?php
-if(isset($_SESSION['username'])){
-    header('Location: /account');
+if (isset($_SESSION['username'])) {
+  header('Location: /account');
 }
 
 
@@ -54,34 +54,34 @@ if(isset($_SESSION['username'])){
 </div>
 
 <script>
-    const form = document.querySelector('#login-form');
-    form.addEventListener("submit", handleSubmission, false);
-    console.log(form)
+  const form = document.querySelector('#login-form');
+  form.addEventListener("submit", handleSubmission, false);
+  console.log(form)
 
-    async function handleSubmission(e){
-        e.preventDefault();
+  async function handleSubmission(e) {
+    e.preventDefault();
 
-        const username = e.target.username.value;
-        const password = e.target.password.value;
+    // Get Values from form
 
-        const body = {username, password };
+    const username = e.target.username.value;
+    const password = e.target.password.value;
 
-        const res = await postAccount(body);
-        Alpine.store('main').addMessage(res.status,res.message);
-        window.location.href = "http://localhost/pages/account"
-    }
+    const body = { username, password };
 
-    async function postAccount(form){
-        const res = await fetch('http://localhost/api/auth/login',{
-            method:"POST",
-            body: JSON.stringify(form)
-        });
-        const json = await res.json();
-        return json;
-    }
+    // Post this to API route and redirect to logged in page
 
-    </script>
+    const res = await authLogin(body);
+    Alpine.store('main').addMessage(res.status, res.message);
+    window.location.href = "http://localhost/pages/account"
+  }
 
+  async function authLogin(form) {
+    const res = await fetch('http://localhost/api/auth/login', {
+      method: "POST",
+      body: JSON.stringify(form)
+    });
+    const json = await res.json();
+    return json;
+  }
 
-
-
+</script>

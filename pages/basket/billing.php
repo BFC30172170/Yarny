@@ -1,10 +1,9 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
-include_once base_path('/lib/basket.php');
 ?>
 
 <?php
-
+// Initialise a basket from the session and retrieve and expand its values.
 $basket = new Basket($_SESSION);
 $products = $basket->getBasketProducts($con);
 $total = $basket->getBasketSummary();
@@ -13,43 +12,74 @@ $address = Address::getAddress($con, $basket->addressId);
 $account = Account::getAccount($con, $basket->accountId);
 ?>
 
+<!-- Render Basket Products -->
 <?php
 foreach ($products as $product) {
-?>
+    ?>
     <div class="flex my-4">
         <img src="<?= $product->image ?>" alt="Angled front view with bag zipped and handles upright." class="w-16 h-16 object-center object-cover sm:rounded-lg mr-2">
         <div>
-            <p><?= $product->name ?></p>
-            <p>£<?= $product->price ?></p>
+            <p>
+                <?= $product->name ?>
+            </p>
+            <p>£
+                <?= $product->price ?>
+            </p>
         </div>
     </div>
-<?php
+    <?php
 }
 ?>
-
-<div>Substotal: £<?= $total ?></div>
-<div>Postage and Packaging: £<?= $packaging ?></div>
-<div>Grand Total: £<?= $total + $packaging ?></div>
-
-<div>
-    <h1 class="text-xl font-black uppercase"><?= $address->postcode ?></h1>
-    <p>Name: <?= $address->forename ?> <?= $address->surname ?></p>
-    <p><?= $address->line1 ?></p>
-    <p><?= $address->line2 ?></p>
-    <p><?= $address->line3 ?></p>
-    <p><?= $address->town ?></p>
-    <p><?= $address->postcode ?></p>
-    <p><?= $address->country ?></p>
-    <p><?= $address->account ?></p>
+<!-- Render Basket Summaries -->
+<div>Substotal: £
+    <?= $total ?>
+</div>
+<div>Postage and Packaging: £
+    <?= $packaging ?>
+</div>
+<div>Grand Total: £
+    <?= $total + $packaging ?>
 </div>
 
-<?php var_dump($account)?>
+<!-- Render Selected Address -->
+<div>
+    <h1 class="text-xl font-black uppercase">
+        <?= $address->postcode ?>
+    </h1>
+    <p>Name:
+        <?= $address->forename ?>
+        <?= $address->surname ?>
+    </p>
+    <p>
+        <?= $address->line1 ?>
+    </p>
+    <p>
+        <?= $address->line2 ?>
+    </p>
+    <p>
+        <?= $address->line3 ?>
+    </p>
+    <p>
+        <?= $address->town ?>
+    </p>
+    <p>
+        <?= $address->postcode ?>
+    </p>
+    <p>
+        <?= $address->country ?>
+    </p>
+    <p>
+        <?= $address->account ?>
+    </p>
+</div>
 
-<a href="/"><button class="border p-2">Checkout</button></a>
+<!-- Render account details -->
+<?php var_dump($account) ?>
 
 <button id="checkout-button">Create Sale</button>
 
 <script>
+    // Call the sale api, values do not need to be passed as these are all stored in the session
     const form = document.querySelector('#checkout-button');
     form.addEventListener("click", handleSubmission, false);
 

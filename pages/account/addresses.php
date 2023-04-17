@@ -2,37 +2,41 @@
 include_once base_path('inc/inc_dbconnect.php');
 ?>
 
+<!-- Get all the accounts addresss -->
 <?php
 $id = $_SESSION['id'];
 $addresses = Address::getAccountAddresses($con, $id);
 ?>
 
+<!-- Render each address -->
 <?php
-foreach($addresses as $address){
+foreach ($addresses as $address) 
+{
 ?>
-<div>
-<h1 class="text-xl font-black uppercase"><?=$address->postcode?></h1>
-<p>Name: <?=$address->forename?> <?=$address->surname?></p>
-<p><?=$address->line1?></p>
-<p><?=$address->line2?></p>
-<p><?=$address->line3?></p>
-<p><?=$address->town?></p>
-<p><?=$address->postcode?></p>
-<p><?=$address->country?></p>
-<p><?=$address->account?></p>
-</div>
+    <div>
+        <h1 class="text-xl font-black uppercase"><?= $address->postcode ?></h1>
+        <p>Name: <?= $address->forename ?>     <?= $address->surname ?></p>
+        <p><?= $address->line1 ?></p>
+        <p><?= $address->line2 ?></p>
+        <p><?= $address->line3 ?></p>
+        <p><?= $address->town ?></p>
+        <p><?= $address->postcode ?></p>
+        <p><?= $address->country ?></p>
+        <p><?= $address->account ?></p>
+    </div>
 
 <?php
 }
 ?>
 
+<!-- Render form -->
 <form class="flex flex-col w-72 p-6 border rounded-lg shadow-lg ml-auto" id="address-form">
-    
-<h1 class="text-2xl font-black">Add new Address</h1>
+
+    <h1 class="text-2xl font-black">Add new Address</h1>
 
     <label for="forename">Forename</label>
     <input type="text" name="forename" value="Forename" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-    
+
     <label for="surname">Surname</label>
     <input type="text" name="surname" value="Surname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 
@@ -57,13 +61,14 @@ foreach($addresses as $address){
     <button name="submit">Submit</button>
 </form>
 
+<!-- Form logic -->
 <script>
     const form = document.querySelector('#address-form');
     form.addEventListener("submit", handleSubmission, false);
 
     async function handleSubmission(e) {
         e.preventDefault();
-
+        // bring in values
         const forename = e.target.forename.value;
         const surname = e.target.surname.value;
         const line1 = e.target.line1.value;
@@ -72,7 +77,7 @@ foreach($addresses as $address){
         const town = e.target.town.value;
         const postcode = e.target.postcode.value;
         const country = e.target.country.value;
-        const account = <?=$id?>;
+        const account = <?= $id ?>;
 
         const body = {
             forename,
@@ -86,6 +91,7 @@ foreach($addresses as $address){
             account
         };
 
+        // post and reload with message
         const res = await postAddress(body);
         window.location.href = "/account/addresses"
         Alpine.store('main').addMessage(res.status, res.message);

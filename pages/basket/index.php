@@ -1,10 +1,11 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
-include_once base_path('/lib/basket.php');
 ?>
+<!-- First step of checkout process -->
+
 
 <?php
-
+// Initialise basket and get products and summary
 $basket = new Basket($_SESSION);
 $products = $basket->getBasketProducts($con);
 $total = $basket->getBasketSummary();
@@ -13,19 +14,29 @@ $packaging = $basket->getBasketPackaging();
 ?>
 
 <?php
-foreach($products as $product){
-            ?>
-            <div class="flex my-4">
-                <img src="<?= $product->image ?>" alt="Angled front view with bag zipped and handles upright." class="w-16 h-16 object-center object-cover sm:rounded-lg mr-2">
-                <div>
-                <p><?=$product->name ?></p>
-                <p>£<?=$product->price ?></p>
-                </div>
-            </div>
-            <?php
-            }
-            ?>
-            <div>Substotal: £<?=$total?></div>
-            <div>Postage and Packaging: £<?=$packaging?></div>
-            <div>Grand Total: £<?=$total + $packaging?></div>
-            <a href="/basket/delivery"><button class="border p-2">Continue</button></a>
+// Render each product in the basket
+foreach ($products as $product) 
+{
+?>
+    <div class="flex my-4">
+        <img src="<?= $product->image ?>" alt="Angled front view with bag zipped and handles upright." class="w-16 h-16 object-center object-cover sm:rounded-lg mr-2">
+        <div>
+            <p><?= $product->name ?></p>
+            <p>£<?= $product->price ?></p>
+        </div>
+    </div>
+<?php
+}
+?>
+
+<!-- Render the basket summaries -->
+<div>Substotal: £
+    <?= $total ?>
+</div>
+<div>Postage and Packaging: £
+    <?= $packaging ?>
+</div>
+<div>Grand Total: £
+    <?= $total + $packaging ?>
+</div>
+<a href="/basket/delivery"><button class="border p-2">Continue</button></a>
