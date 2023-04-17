@@ -38,7 +38,7 @@ function renderCategory(Category $cat)
     <!-- Category form -->
     <form class="flex flex-col w-64 p-6 border rounded-lg shadow-lg ml-auto" id="cat-form">
 
-        <h1 class="text-2xl font-black">Add new Category</h1>
+        <h2>Add new Category</h1>
 
         <label for="name">Name</label>
         <input type="text" name="name" value="New Category Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
@@ -82,7 +82,7 @@ function renderCategory(Category $cat)
     <!-- Tag Form -->
 
     <form class="flex flex-col w-64 p-6 border rounded-lg shadow-lg ml-auto" id="tag-form">
-        <h1 class="text-2xl font-black">Add new tag</h1>
+        <h2 >Add new tag</h1>
         <label for="name">Name</label>
         <input type="text" name="name" value="New Tag Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 
