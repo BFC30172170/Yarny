@@ -1,6 +1,7 @@
 <?php
 include_once base_path('/inc/inc_dbconnect.php');
 include_once base_path('inc/inc_table.php');
+include base_path('inc/inc_user.php');
 ?>
 
 <!-- Get all the accounts sales -->

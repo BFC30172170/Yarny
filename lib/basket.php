@@ -29,7 +29,12 @@ class Basket
     }
     function removeFromBasket($id)
     {
-        unset($this->productIds,$id);
+        foreach ($this->productIds as $key => $product) {
+            if($id == $product){
+                unset($this->productIds["$key"]);
+            break;
+            }
+        }
     }
 
     // Pass in the id of an address to add it as the prospective delivery addresss

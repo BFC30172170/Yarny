@@ -42,8 +42,22 @@ $reviews = Review::getProductReviews($con, $product->id);
         });
         const json = await res.json();
         Alpine.store('main').addMessage(json.status, json.message)
-        window.location.href = "http://localhost/products"
     }
+
+    
+    const checkoutNow = async (id) => {
+        const res = await fetch('http://localhost/api/basket', {
+            method: 'POST',
+            body: JSON.stringify({
+                'productId': id
+            })
+        });
+        const json = await res.json();
+        Alpine.store('main').addMessage(json.status, json.message)
+        window.location.href = "http://localhost/basket"
+    }
+
+
 </script>
 
 
@@ -99,7 +113,7 @@ $reviews = Review::getProductReviews($con, $product->id);
                 </div>
 
                 <div class="mt-10 flex sm:flex-col1 gap-4">
-                    <button type="submit" class="max-w-xs flex-1 bg-teal-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-teal-500 sm:w-full">Checkout
+                    <button  onclick="checkoutNow(<?= $product->id ?>)" type="submit" class="max-w-xs flex-1 bg-teal-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-teal-500 sm:w-full">Checkout
                         Now</button>
                     <button onclick="addToBasket(<?= $product->id ?>)" type="submit" class="max-w-xs flex-1 border border-teal-600 border-4 rounded-md py-3 px-8 flex items-center justify-center text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-teal-500 sm:w-full">Add
                         to bag</button>
@@ -135,15 +149,15 @@ $reviews = Review::getProductReviews($con, $product->id);
     <h2 class="text-2xl font-black">Add new Review</h2>
 
     <label for="name">Name</label>
-    <input type="text" name="name" value="Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    <input type="text" name="name" placeholder="Review Name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 
     <label for="description">Description</label>
-    <input type="text" name="description" value="Description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    <textarea type="text" rows="4" name="description" placeholder="Review Description..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></textarea>
 
     <label for="score">Score</label>
-    <input type="number" min="0" max="10" step="1" name="score" value="5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+    <input type="number" min="0" max="10" step="1" name="score" placeholder="from 1 to 10..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
 
-    <div class="px-4">
+    <div class="px-4 py-2">
         <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" value="" class="sr-only peer" name="active">
             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">

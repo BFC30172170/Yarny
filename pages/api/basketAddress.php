@@ -10,7 +10,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $_SESSION['address'] = $data['id'];
         
         $basket = new Basket($_SESSION);
-        $ressponse['basket'] = $basket;
+        $response['basket'] = $basket;
         $response['status'] = "success";
         $response['message'] = "An address has been added to the basket";
         $newMessages = $_SESSION['messages'];

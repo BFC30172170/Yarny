@@ -12,7 +12,7 @@ class Query
         $this->sort = array_key_exists('sort', $queries) ? $queries['sort'] : 'PRODUCT_ID';
         $this->order = array_key_exists('order', $queries) ? $queries['order'] : 'ASC';
         $this->search = array_key_exists('search', $queries) && !empty($queries['search']) ? '%' . $queries['search'] . '%' : null;
-        $this->active = true;
+        $this->active = array_key_exists('active', $queries) && !empty($queries['active']) ? false : true ;
     }
     public $category;
     public $tags;

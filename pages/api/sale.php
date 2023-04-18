@@ -8,6 +8,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $data = json_decode($json, true);
 
         $basket = new Basket($_SESSION);
+        $basket->getBasketProducts($con);
         $sale = Sale::createSale($con, $basket);
 
         $response['status'] = "success";

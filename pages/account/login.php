@@ -28,17 +28,6 @@ if (isset($_SESSION['username'])) {
         </div>
       </div>
 
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500">
-          <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
-        </div>
-
-        <div class="text-sm">
-          <a href="#" class="font-medium text-teal-600 hover:text-teal-500">Forgot your password?</a>
-        </div>
-      </div>
-
       <div>
         <button type="submit" class="group relative flex w-full justify-center rounded-md border border-transparent bg-teal-600 py-2 px-4 text-sm font-medium text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -72,7 +61,9 @@ if (isset($_SESSION['username'])) {
 
     const res = await authLogin(body);
     Alpine.store('main').addMessage(res.status, res.message);
-    window.location.href = "http://localhost/pages/account"
+    if (res.status == 'success'){
+    window.location.href = "/account"
+    }
   }
 
   async function authLogin(form) {

@@ -38,7 +38,6 @@ if($_SERVER['REQUEST_METHOD'] == 'DELETE'){
     $data = json_decode($json, true);
     if(isset($data['productId'])){
         $id = intval($data['productId']);
-    var_dump($_SESSION);
     if(isset($_SESSION['basket'])){
         $basket = new Basket($_SESSION);
         $basket->removeFromBasket($id);

@@ -20,17 +20,25 @@ class Auth
         $account = Account::getAccountByName($con, $cred->username);
         if (!isset($account)) {
             $this->message .= 'Username incorrect';
-            return null;
+            $this->valid = false;
         }
-        if (password_verify($cred->password, $account->hashedpass)) {
-            $_SESSION['username'] = $account->username;
-            $_SESSION['role'] = $account->role;
-            $_SESSION['id'] = $account->id;
-            $this->message .= 'Login Success';
-        } else {
-            $this->message .= 'Password incorrect';
+
+        if (!is_null($account)) {
+            if (password_verify($cred->password, $account->hashedpass)) {
+                $_SESSION['username'] = $account->username;
+                $_SESSION['role'] = $account->role;
+                $_SESSION['id'] = $account->id;
+                $this->message .= 'Login Success';
+            }
+            else {
+                $this->message .= 'Password incorrect';
+                $this->valid = false;
+            }
+            ;
         }
-        ;
+        if ($this->valid == false) {
+            throw new Exception($this->message);
+        }
         return ($this);
     }
 

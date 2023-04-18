@@ -1,11 +1,16 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
+include base_path('inc/inc_user.php');
 ?>
 
 <?php
 // Get all the account's addresses
 $id = $_SESSION['id'];
 $addresses = Address::getAccountAddresses($con, $id);
+$basket = new Basket($_SESSION);
+
+//set default address
+$_SESSION['address'] = $addresses[0]->id;
 ?>
 <h2>Choose a delivery address</h2>
 <div class="flex gap-4">

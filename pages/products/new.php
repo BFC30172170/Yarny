@@ -1,5 +1,6 @@
 <?php
 include base_path('inc/inc_dbconnect.php');
+include base_path('inc/inc_admin.php');
 ?>
 
 <?php

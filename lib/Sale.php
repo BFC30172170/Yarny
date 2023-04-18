@@ -101,12 +101,29 @@ class Sale
 
         $basket->getBasketProducts($con);
 
+        //Sort out quantities
+        $saleRowPrimer = array();
+
         foreach ($basket->products as $product) {
+            $exists = false;
+            foreach($saleRowPrimer as $currentRow){
+                if ($currentRow->id == $product->id){
+                    $currentRow->quantity = $currentRow->quantity + 1;
+                    $exists= true;
+                }
+            }
+            if ($exists == false){
+                $product->quantity = 1;
+                array_push($saleRowPrimer,$product);
+            }
+        }
+
+        foreach ($saleRowPrimer as $product) {
             $sql = "INSERT INTO sale_row (SR_ORIG_PRICE,SR_FINAL_PRICE,SR_QUANTITY,SALE_ID,PRODUCT_ID) VALUES (:original,:final,:quantity,:sale,:product);";
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':original', $product->price, PDO::PARAM_STR);
             $stmt->bindValue(':final', $product->price, PDO::PARAM_STR);
-            $stmt->bindValue(':quantity', 1, PDO::PARAM_INT);
+            $stmt->bindValue(':quantity', $product->quantity, PDO::PARAM_INT);
             $stmt->bindValue(':sale', $saleId, PDO::PARAM_INT);
             $stmt->bindValue(':product', $product->id, PDO::PARAM_INT);
             $stmt->execute();

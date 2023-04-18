@@ -25,6 +25,26 @@ class Account
     public $mobile;
     public $created;
 
+    // Get all accounts
+    static function getAccounts(PDO $con)
+    {
+        $sql = "SELECT * FROM account;";
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        if ($stmt->rowCount() == 0) {
+            return null;
+        } else {
+            $results = $stmt->fetchAll();
+            $accounts = array();
+            foreach ($results as $result) {
+                $account = new Account($con, $result);
+                array_push($accounts, $account);
+            }
+            return $accounts;
+        }
+        ;
+    }
+
     // Pass in DB reference and id to return single account
     static function getAccount(PDO $con, $id)
     {
@@ -83,8 +103,8 @@ class Account
         $stmt = $con->prepare($sql);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
-        if ($stmt->rowCount() != 0) {
-            return null;
+        if ($stmt->rowCount() != 1) {
+            return [];
         } else {
             $results = $stmt->fetchAll();
             $result = $results[0];

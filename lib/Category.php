@@ -144,7 +144,6 @@ class Category
 
         } catch (\Exception | PDOException $th) {
             echo 'hello';
-            var_dump($th);
             return $th;
         }
     }

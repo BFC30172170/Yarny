@@ -32,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $matchingAccounts = Account::getAccountByEmail($con, $accountForm->email);
 
         if(isset($matchingAccounts)){
+            if (count($matchingAccounts) > 0){
             throw new Exception('email taken');
+            }
         }
 
         $account = Account::createAccount($con, $accountForm);

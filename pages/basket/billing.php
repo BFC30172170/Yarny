@@ -1,6 +1,7 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
 include_once base_path('inc/inc_table.php');
+include base_path('inc/inc_user.php');
 ?>
 
 <?php
@@ -61,11 +62,11 @@ renderTable($con, [$account]);
         e.preventDefault();
 
         const res = await postSale();
-        window.location.href = "http://localhost/account/orders"
+        window.location.href = "/account/orders"
         Alpine.store('main').addMessage(res.status, res.message);
     }
     async function postSale() {
-        const res = await fetch('http://localhost/api/sale', {
+        const res = await fetch('/api/sale', {
             method: "POST",
         });
         const json = await res.json();

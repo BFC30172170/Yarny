@@ -70,7 +70,9 @@ if (isset($_SESSION['username'])) {
 
     const res = await postAccount(body);
     Alpine.store('main').addMessage(res.status, res.message);
-    window.location.href = "http://localhost/pages/account"
+    if (res.status == 'success'){
+    window.location.href = "/account"
+    }
   }
 
   async function postAccount(form) {

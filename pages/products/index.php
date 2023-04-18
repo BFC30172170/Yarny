@@ -55,8 +55,8 @@ function renderCategory(Category $cat)
         <div class="md:ml-auto flex gap-4 text-xl">
             <!-- Display Mode toggles -->
             <div>
-                <i class="fa-solid fa-grip fa-2xl transition duration-300" :class=" !list ? 'text-cyan-500' : ''" @click="list=false"></i>
-                <i class="fa-solid fa-bars fa-xl transition duration-300" :class=" list ? 'text-cyan-500' : ''" @click="list=true"></i>
+                <i class="fa-solid fa-grip fa-2xl transition duration-300" :class=" !list ? 'text-teal-500' : ''" @click="list=false"></i>
+                <i class="fa-solid fa-bars fa-xl transition duration-300" :class=" list ? 'text-teal-500' : ''" @click="list=true"></i>
             </div>
             <div class="flex">
                 <!-- Search Input -->

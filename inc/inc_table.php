@@ -5,10 +5,16 @@ function renderTable($con,$array){
     $result .=  "<div class='flex flex-col w-full'>";
     foreach ($array as $key => $row) {
         $row = getDisplayValues($con,$row);
+        if (isset($row->link)){
+            $result .= "<a href='$row->link'>";
+        }
         $result .= "<div class='flex flex-col w-full mt-2' id='$row->title'>";
         $result .= "<div class='flex w-full space-around mb-2 border-b-4'>";
         $result .= "<div class='flex space-between w-full items-center'><h3 class='flex'>$row->title</h3> <h4 class='flex ml-auto text-lg'>$row->subtitle</h4></div>";
         $result .= "</div>";
+        if (isset($row->link)){
+            $result .= "</a>";
+        }
         foreach ($row->values as $col => $val) {
             $result .= "<div class='flex space-between";
             $result .= "<p class='block'>$col</p>";
@@ -27,6 +33,7 @@ function getDisplayValues($con,$row){
     $class = get_class($row);
     $title = '';
     $subtitle = '';
+    $link = null;
     $values = [];
     switch ($class) {
         case 'Address':
@@ -56,7 +63,7 @@ function getDisplayValues($con,$row){
                 "Address" => $row->address->postcode . ', ' . $row->address->line1,
             ];
             foreach ($row->saleRows as $key => $saleRow) {
-                $product = Product::getProduct($con,$saleRow->id);
+                $product = Product::getProduct($con,$saleRow->product);
                 $values["$saleRow->quantity * $product->name"] = $saleRow->quantity * $saleRow->finalPrice;
             };
             break;
@@ -68,7 +75,7 @@ function getDisplayValues($con,$row){
             $values = [
                 "Review Title" => $row->name,
                 "Review Description" => $row->description,
-                "Active? " => $row->active,
+                "Active? " => $row->active == 1 ? 'Active' : 'Inactive'
             ];
             break;
 
@@ -88,33 +95,51 @@ function getDisplayValues($con,$row){
         case 'Product':
             $title = $row->name;
             $subtitle = $row->price;
+            $link = "/products/$row->id";
             $values =[
                 "Slug" => $row->slug,
                 "Description" => $row->description,
-                "Active" => $row->active,
+                "Active" => $row->active == 1 ? 'Active' : 'Inactive',
             ];
-            $values = [];
             break;
+
+        case 'Message':
+            $account = Account::getAccount($con,$row->account);
+            $title = $row->name;
+            $subtitle = $row->created;
+            $values = [
+                "Title" => $row->name,
+                "Description" => $row->description,
+                "Created On" => $row->created,
+                "Created By" => $account->username,
+            ];
+            if ($_SESSION['role'] !='admin'){
+                $values = [];
+            }
+            break;
+
         default:
             echo 'not here';
             break;
     }
-    $tr = new TableRow($title, $subtitle,$values);
+    $tr = new TableRow($title,$subtitle,$values,$link);
     return $tr;
 }
 
 
 class TableRow
 {
-    function __construct($title,$subtitle,$values)
+    function __construct($title,$subtitle,$values,$link = null)
     {
         $this->title = $title;
         $this->subtitle = $subtitle;
+        $this->link = $link;
         $this->values = $values;
 
     }
     public $title;
     public $subtitle;
+    public $link;
     public $values;
 
 

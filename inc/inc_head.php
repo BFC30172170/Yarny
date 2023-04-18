@@ -23,6 +23,7 @@
                 <li class="text-teal-500"><a href="/"><i class="fa-solid fa-house"></i> YARNY</a></li>
                 <li><a href="/#about">About</a></li>
                 <li><a href="/products">Products</a></li>
+                <li class="hidden md:block"><a href="/contact">Contact</a></li>
             </ul>
             <!-- Right Nav -->
             <ul class="flex gap-4 p-8 text-xl font-black uppercase ml-auto">

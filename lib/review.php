@@ -26,6 +26,26 @@ class Review
     public $product;
     public $account;
 
+    //Get All Reviews
+    static function getReviews(PDO $con, $accountId)
+    {
+        $sql = "SELECT * FROM review";
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        if ($stmt->rowCount() == 0) {
+            return [];
+        } else {
+            $results = $stmt->fetchAll();
+            $reviews = array();
+            foreach ($results as $result) {
+                $review = new Review($con, $result);
+                array_push($reviews, $review);
+            }
+            return $reviews;
+        }
+        ;
+    }
+
     // Get a single review by ID
     static function getReview(PDO $con, $id)
     {
@@ -56,7 +76,7 @@ class Review
         $stmt->bindValue(':id', $accountId, PDO::PARAM_INT);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
-            return null;
+            return [];
         } else {
             $results = $stmt->fetchAll();
             $reviews = array();
