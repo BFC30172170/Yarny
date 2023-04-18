@@ -14,3 +14,11 @@ alter the httpd.conf file to set the document root and directory to the public f
 DocumentRoot "C:/path/to/xampp/htdocs/yarny"
 <Directory "C:/path/to/xampp/htdocs/yarny/public">
 ```
+
+## Credentials
+
+Sample credentials to explore the site as an admin or user are found below in the format USERNAME:PASSWORD
+
+admin:password
+user:password
+
