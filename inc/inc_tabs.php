@@ -33,7 +33,7 @@ $categories = [
             </div>
             <div>
                 <h4 class="text-sm text-gray-700 mt-4">
-                    <a href="#">
+                    <a href="/products">
                         <span aria-hidden="true" class="absolute inset-0"></span>
                         <?= $category['title'] ?>
                     </a>

@@ -118,7 +118,7 @@ $cats = Category::getCategoryList($con);
         console.log(imageRes.image_source);
 
         const res = await postProduct(body);
-        window.location.href = "http://localhost/products" + res.product.id;
+        window.location.href = "/products/" + res.product.id;
         Alpine.store('main').addMessage(res.status, res.message);
     }
 

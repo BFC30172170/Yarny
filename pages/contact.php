@@ -1,6 +1,6 @@
 <?php
 include_once base_path('inc/inc_dbconnect.php');
-
+include base_path('inc/inc_user.php');
 $id = $_SESSION['id'];
 ?>
 

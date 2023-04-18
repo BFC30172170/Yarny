@@ -87,14 +87,14 @@ $reviews = Review::getProductReviews($con, $product->id);
                     <?php
                     foreach ($product->tags as $tag) {
                     ?>
-                        <p class="bg-emerald-300 rounded-lg p-1 text-white"><?= $tag->name ?></p>
+                        <p class="tag rounded-lg p-1 mr-2 text-black"><?= $tag->name ?></p>
                     <?php
                     }
                     ?>
                 </div>
                 <h2 class="text-3xl font-extrabold tracking-tight text-gray-900"><?= $product->name ?>
                     <?= $product->active ? '' : '(inactive)' ?></h2>
-                    <?php if ($_SESSION['role'] == 'admin') {?>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {?>
                 <button onclick="deleteProduct(<?= $product->id ?>)">DELETE</button>
                 <a href="/products/<?= $product->id ?>/update">EDIT</a>
                 <?php } ?>
@@ -144,6 +144,8 @@ $reviews = Review::getProductReviews($con, $product->id);
     }
     ?>
 
+<?php if (isset($_SESSION['role'])) {?>
+
 <form class="flex flex-col p-6 border rounded-lg shadow-lg"  id="review-form">
 
     <h2 class="text-2xl font-black">Add new Review</h2>
@@ -168,6 +170,8 @@ $reviews = Review::getProductReviews($con, $product->id);
 
     <button name="submit">Submit</button>
 </form>
+
+<?php } ?>
 
 </div>
 <script>
@@ -206,4 +210,35 @@ $reviews = Review::getProductReviews($con, $product->id);
         const json = await res.json();
         return json;
     }
+</script>
+
+<script>
+    // Make sure that tags can be recognised for a unique color for their tag
+
+    // Get a specific colour from a tags hash value
+    function stringToColour(string) {
+        console.log(string)
+        let result = 0;
+        for (let i = 0; i < string.length; i++) {
+            result = result + string.charCodeAt(i);
+        }
+        result = result * 12;
+        result = result + 'a';
+        let hue = result.slice(1, 4);
+        return hue;
+    }
+
+    // Set the tags to their specific tag colour
+    function setTagColours() {
+        const tags = document.querySelectorAll('.tag');
+        tags.forEach(tag => {
+            const hue = stringToColour(tag.innerHTML);
+            tag.style.backgroundColor = 'hsl(' + hue + ',71%,86%)';
+            console.log(tag);
+        });
+
+    }
+
+    setTagColours();
+
 </script>

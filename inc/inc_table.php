@@ -113,9 +113,6 @@ function getDisplayValues($con,$row){
                 "Created On" => $row->created,
                 "Created By" => $account->username,
             ];
-            if ($_SESSION['role'] !='admin'){
-                $values = [];
-            }
             break;
 
         default:

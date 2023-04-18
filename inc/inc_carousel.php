@@ -2,7 +2,7 @@
 include base_path('inc/inc_dbconnect.php');
 
 // Query Products with specific tag
-$query = new Query('tag=1,2,3,4,5,6,7');
+$query = new Query('tag=4');
 $products = Product::getProducts($con, $query);
 $last = array_key_last($products);
 ?>

@@ -24,7 +24,6 @@ class Router{
     // router a given uri to a given resource given the routes available
     public function route($uri){
         try {
-            //code...
         foreach ($this->routes as $route) {
             // STATIC ROUTES
             if($uri === $route['uri']){
