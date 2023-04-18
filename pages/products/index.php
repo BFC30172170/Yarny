@@ -132,7 +132,7 @@ function renderCategory(Category $cat)
                     </div>
                     <div class="flex flex-col space-between p-2 w-full">
                         <h4 class="text-sm text-gray-700" x-text="product.name"></h4>
-                        <p class="text-sm text-gray-700" x-text="product.description">
+                        <p class="text-sm text-gray-700" x-text="product.description.substring(0,100) + '...'">
                             </hp>
                         <div class="mt-auto flex space-between items-center">
                             <p class="text-lg font-medium text-gray-900" x-text="'£' + product.price"></p>
